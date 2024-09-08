@@ -1,7 +1,19 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".", // Cấu hình đường dẫn cơ bản
+    "paths": {
+      "~/*": [
+        "src/*"
+      ] // Alias "~" trỏ đến thư mục "src"
+    }
+  },
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
