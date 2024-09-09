@@ -1,0 +1,4 @@
+interface OnclickText {
+    label: string
+    
+}

@@ -7,7 +7,7 @@ const Home = () => {
     return(
         <LayoutMain>
             <div className="h-screen w-full">
-                <Search />
+
             </div>
         </LayoutMain>
     )
