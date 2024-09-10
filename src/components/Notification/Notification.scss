@@ -1,0 +1,17 @@
+.scroll-container {
+    /* Hoặc chiều cao cụ thể bạn muốn */
+    overflow-y: scroll;
+    /* Cho phép cuộn dọc */
+}
+
+/* Ẩn thanh cuộn trong Chrome, Safari và Edge */
+.scroll-container::-webkit-scrollbar {
+    width: 0;
+    /* Ẩn thanh cuộn dọc */
+}
+
+/* Ẩn thanh cuộn trong Firefox */
+.scroll-container {
+    scrollbar-width: none;
+    /* Ẩn thanh cuộn dọc */
+}

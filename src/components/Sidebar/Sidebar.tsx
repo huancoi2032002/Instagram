@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import './Sidebar.scss';
 import Search from '../Search/Search';
 import ItemSidebar from './Components/ItemSidebar';
+import Notification from '../Notification/Notification';
+import SettingDrop from '../Setting/SettingDrop/SettingDrop';
 
 
 const dataSidebar = [
@@ -51,23 +53,29 @@ const dataSidebar = [
 const Sidebar = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const [isSettingDropOpen, setIsSettingDropOpen] = useState(false);
     const [activeItem, setActiveItem] = useState<string | null>(null);
 
     const handleItemClick = (title: string) => {
         if (title === "Tìm kiếm") {
             setIsSearchOpen(prev => !prev);
             setActiveItem(prev => (prev === title ? null : title));
-            setIsNotificationOpen(false); // Ensure Notification is closed
+            setIsNotificationOpen(false); 
         } else if (title === "Thông báo") {
             setIsNotificationOpen(prev => !prev);
             setActiveItem(prev => (prev === title ? null : title));
-            setIsSearchOpen(false); // Ensure Search is closed
-        } else {
+            setIsSearchOpen(false); 
+        }else {
             setIsSearchOpen(false);
             setIsNotificationOpen(false);
             setActiveItem(title); // Set clicked item as active and reset others
         }
     };
+
+    const handleOpenSettingDrop = () => {
+        setIsSettingDropOpen(prev => !prev)
+        
+    }
     
     return (
         <div className="w-full flex h-screen">
@@ -96,12 +104,14 @@ const Sidebar = () => {
                         title="Xem thêm"
                         path=""
                         isActive={activeItem === "Xem thêm"}
-                        
+                        onClick={handleOpenSettingDrop}
                     />
                 </div>
 
             </div>
             {isSearchOpen && <Search />} {/* Show SearchComponent when open */}
+            {isNotificationOpen && <Notification />}
+            {isSettingDropOpen && <SettingDrop />}
         </div>
     );
 }

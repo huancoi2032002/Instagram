@@ -28,7 +28,7 @@ const Search = () => {
 
 
     return (
-        <div className="h-screen w-[397px] border-r border-white/20 rounded-xl">
+        <div className="h-screen w-[397px] border-r border-white/20 rounded-xl scroll-container">
             <div className="flex flex-col pt-6 pb-5 px-4 gap-2">
                 <h1 className="text-[24px] mb-5">Tìm kiếm</h1>
                 <div className="w-[364px] h-10 relative bg-[#363636] px-4 rounded-lg" onClick={handleClickContainer}>
