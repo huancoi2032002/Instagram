@@ -8,6 +8,7 @@ import Search from '../Search/Search';
 import ItemSidebar from './Components/ItemSidebar';
 import Notification from '../Notification/Notification';
 import SettingDrop from '../Setting/SettingDrop/SettingDrop';
+import CreatePost from '../CreatePosts/CreatePost';
 
 
 const dataSidebar = [
@@ -54,6 +55,7 @@ const Sidebar = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isSettingDropOpen, setIsSettingDropOpen] = useState(false);
+    const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
     const [activeItem, setActiveItem] = useState<string | null>(null);
 
     const handleItemClick = (title: string) => {
@@ -61,11 +63,19 @@ const Sidebar = () => {
             setIsSearchOpen(prev => !prev);
             setActiveItem(prev => (prev === title ? null : title));
             setIsNotificationOpen(false); 
+            setIsCreatePostOpen(false)
         } else if (title === "Thông báo") {
             setIsNotificationOpen(prev => !prev);
             setActiveItem(prev => (prev === title ? null : title));
             setIsSearchOpen(false); 
-        }else {
+            setIsCreatePostOpen(false)
+        } else if (title === "Tạo") {
+            setIsCreatePostOpen(prev => !prev);
+            setActiveItem(prev => (prev === title ? null : title));
+            setIsSearchOpen(false);
+            setIsNotificationOpen(false) 
+        }
+        else {
             setIsSearchOpen(false);
             setIsNotificationOpen(false);
             setActiveItem(title); // Set clicked item as active and reset others
@@ -74,9 +84,9 @@ const Sidebar = () => {
 
     const handleOpenSettingDrop = () => {
         setIsSettingDropOpen(prev => !prev)
-        
     }
-    
+
+
     return (
         <div className="w-full flex h-screen">
             <div className={`h-full sidebar p-3 border-r border-white/20 flex flex-col ${isSearchOpen || isNotificationOpen ? 'sidebar-closed' : ''}`}>
@@ -112,6 +122,7 @@ const Sidebar = () => {
             {isSearchOpen && <Search />} {/* Show SearchComponent when open */}
             {isNotificationOpen && <Notification />}
             {isSettingDropOpen && <SettingDrop />}
+            {isCreatePostOpen && <CreatePost />}
         </div>
     );
 }

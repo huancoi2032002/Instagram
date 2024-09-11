@@ -9,7 +9,9 @@ export default {
         '55': '220px'
       },
       backgroundColor: {
-
+        'ig-elevated-background': '#262626',
+        'ig-primary-button': '#0095F6',
+        'ig-primary-button-hover': '#1877F2',
       },
       textColor: {
 
