@@ -48,7 +48,7 @@ const ItemNotification: React.FC<TNotification> = ({des, dateTime}) => {
 
 const Notification = () => {
     return (
-        <div className="h-screen w-[397px] border-r border-white/20 rounded-xl text-[#F5F5F5] scroll-container">
+        <div className="absolute xl:left-60 left-20 top-0 h-screen w-[397px] border-r border-white/20 rounded-xl text-[#F5F5F5] scroll-container bg-black z-50">
             <h1 className="text-2xl font-semibold px-6 py-4">Thông báo</h1>
             <div className="">
                 <h2 className="font-semibold px-6 text-base py-2">Hôm nay</h2>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Logo, LogoMobile } from '~/assets/logo';
 import { HomeIcon, SearchIcon, DiscoveryIcon, ReelIcon, MessengerIcon, NotificationIcon, PlusIcon, SettingIcon } from '~/assets/SidebarIcon';
 import Avatar from '~/assets/avatar.jpg';
@@ -81,14 +81,17 @@ const Sidebar = () => {
             setActiveItem(title); // Set clicked item as active and reset others
         }
     };
-
+    const handleCloseCreatePost = () => {
+        setIsCreatePostOpen(false);  
+        setActiveItem(null)
+    };
     const handleOpenSettingDrop = () => {
         setIsSettingDropOpen(prev => !prev)
     }
 
 
     return (
-        <div className="w-full flex h-screen">
+        <div className="fixed flex h-screen">
             <div className={`h-full sidebar p-3 border-r border-white/20 flex flex-col ${isSearchOpen || isNotificationOpen ? 'sidebar-closed' : ''}`}>
                 <div className="xl:w-55 pt-6 pb-4 px-3 mb-5">
                     <Link to="/" className="">
@@ -122,7 +125,7 @@ const Sidebar = () => {
             {isSearchOpen && <Search />} {/* Show SearchComponent when open */}
             {isNotificationOpen && <Notification />}
             {isSettingDropOpen && <SettingDrop />}
-            {isCreatePostOpen && <CreatePost />}
+            {isCreatePostOpen && <CreatePost onClose={handleCloseCreatePost} />}
         </div>
     );
 }

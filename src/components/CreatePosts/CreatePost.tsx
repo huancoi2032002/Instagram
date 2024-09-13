@@ -1,36 +1,60 @@
-import { MediaIcon, VectorX } from "~/assets"
+import React, { useState, useEffect } from "react";
+import { VectorX } from "~/assets";
+import './CreatePost.scss';
+import ImageCropper from "./Component/ImageCropper";
+import InputFilePost from "./Component/InputFilePost";
+import NotificationPost from "./Component/NotificationPost";
+import { SessionStorageProvider } from '~/ContextAPI/ContextProvider';
 
 
-const CreatePost = () => {
+type CreatePostProps = {
+    onClose: () => void
+}
 
-    
 
+const CreatePost: React.FC<CreatePostProps> = ({ onClose }) => {
+    const [step, setStep] = useState(1);
+    const [showNotification, setShowNotification] = useState(false);
+
+
+    useEffect(() => {
+        console.log("Current step:", step);
+    }, [step]);
+
+
+    const handleFilesSelected = () => {
+        setStep(2);
+    };
+    const handleClose = () => {
+        setShowNotification(true)
+    }
+    const handleCancelPost = () => {
+        setShowNotification(false)
+        onClose();
+    }
+
+    const handleCloseNotification = () => {
+        setShowNotification(false)
+    }
     return (
-        <div className="w-screen h-screen bg-gray-500/20 absolute top-0">
+        <div className="w-screen h-screen bg-black/50 absolute top-0">
             <div className="w-full h-full flex items-center justify-center relative">
-                <div className="w-[34px] h-[34px] absolute top-6 right-2 cursor-pointer">
+                <div className="w-[34px] h-[34px] absolute top-6 right-2 cursor-pointer" onClick={handleClose}>
                     <VectorX className="w-[18px] h-[18px]" />
                 </div>
-                <div className="h-auto w-auto">
-                    <div className="w-[487px] bg-ig-elevated-background rounded-xl">
-                        <div className="py-3 border-b border-white/10">
-                            <div className="text-sm font-semibold text-center">
-                                Tạo bài viết mới
-                            </div>
-                        </div>
-                        <div className="w-[487px] h-[487px] flex items-center justify-center p-6">
-                            <div className="flex flex-col items-center justify-center gap-5">
-                                <div className=""><MediaIcon className="" /></div>
-                                <span className="text-xl">Kéo ảnh và video vào đây</span>
-                                <div className="mt-3">
-                                    <input type="file" multiple id="image-upload" className="hidden"/>
-                                    <label htmlFor="image-upload" className=" bg-ig-primary-button py-[7px] px-4 text-sm rounded-lg cursor-pointer hover:bg-ig-primary-button-hover">Chọn từ máy tính</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
+                {showNotification && <NotificationPost cancel={handleCancelPost} close={handleCloseNotification} />}
+                <div className="custom-create-post my-5">
+                    <div className="custom-create-post-primary">
+                        {step === 1 && <InputFilePost onFilesSelected={handleFilesSelected} />}
+                        {step >= 2 && (
+                            <>
+                                <ImageCropper step={step} setStep={setStep} />
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
+
         </div>
     )
 }
