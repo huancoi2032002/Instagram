@@ -1,0 +1,46 @@
+textarea {
+    scrollbar-width: thin;
+    /* Dùng cho Firefox */
+    scrollbar-color: gray rgba(255, 255, 255, 0.2);
+    /* Màu thanh cuộn và đường track cho Firefox */
+}
+
+/* Tùy chỉnh thanh cuộn cho WebKit browsers */
+
+
+textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.custom-textarea textarea {
+    padding: 0.5rem;
+    /* Điều chỉnh padding để căn giữa nội dung */
+    box-sizing: border-box;
+    /* Đảm bảo padding không làm thay đổi kích thước của textarea */
+    height: auto;
+    /* Đảm bảo chiều cao tự động theo nội dung */
+    min-height: 20px;
+    /* Chiều cao tối thiểu */
+    line-height: 1.5;
+    /* Đảm bảo dòng chữ không bị cắt */
+}
+
+.custom-textarea textarea::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    /* Màu sắc của placeholder */
+    text-align: center;
+    /* Căn giữa theo chiều ngang */
+    line-height: 1.5;
+    /* Đảm bảo placeholder không bị cắt */
+}

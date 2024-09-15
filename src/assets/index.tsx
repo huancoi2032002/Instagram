@@ -20,7 +20,7 @@ export const SearchIcon: React.FC<SvgProps> = ({ className }) => (
 export const SavedIcon: React.FC<SvgProps> = ({ className }) => (
     <svg aria-label="Saved" className={className} fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18">
         <title>Saved</title>
-        <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
+        <polygon className={className} fill="" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
     </svg>
 )
 
@@ -143,5 +143,21 @@ export const CommentIcon: React.FC<SvgProps> = ({ className }) => (
     <svg aria-label="Bình luận" className={className} fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
         <title>Bình luận</title>
         <path className={className} d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path>
+    </svg>
+)
+
+export const OtherOptionsIcon: React.FC<SvgProps> = ({ className }) => (
+    <svg aria-label="Lựa chọn khác" className={className} fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+        <title>Lựa chọn khác</title>
+        <circle cx="12" cy="12" r="1.5"></circle>
+        <circle cx="6" cy="12" r="1.5"></circle>
+        <circle cx="18" cy="12" r="1.5"></circle>
+    </svg>
+)
+export const ShareIcon: React.FC<SvgProps> = ({ className }) => (
+    <svg aria-label="Chia sẻ" className={className} fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+        <title>Chia sẻ</title>
+        <line fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2" x1="22" x2="9.218" y1="3" y2="10.083"></line>
+        <polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></polygon>
     </svg>
 )

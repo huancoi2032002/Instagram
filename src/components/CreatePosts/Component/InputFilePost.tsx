@@ -3,7 +3,6 @@ import useSessionStorage from '~/Hook/useSessionStorage';
 import { MediaIcon } from "~/assets";
 import { LabelPost } from "./LabelPost";
 
-
 type InputFilePostProps = {
     onFilesSelected: () => void; // Callback when files are selected
 };
@@ -11,23 +10,29 @@ type InputFilePostProps = {
 const InputFilePost: React.FC<InputFilePostProps> = ({ onFilesSelected }) => {
     const [selectedFiles, setSelectedFiles] = useSessionStorage<string[]>("selectedFiles", []);
 
-    const fileToBase64 = (file: File): Promise<string> => {
+    // Convert file to base64 (for images) or Blob URL (for videos)
+    const fileToBase64OrBlob = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
+            if (file.type.startsWith("image/")) {
+                reader.readAsDataURL(file); // Convert image to base64
+            } else {
+                resolve(URL.createObjectURL(file)); // Convert video to Blob URL
+            }
             reader.onload = () => resolve(reader.result as string);
             reader.onerror = (error) => reject(error);
         });
     };
+
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
-            const base64Files = await Promise.all(
-                Array.from(files).map((file) => fileToBase64(file))
+            const base64OrBlobFiles = await Promise.all(
+                Array.from(files).map((file) => fileToBase64OrBlob(file))
             );
 
             // Merge the new files with the existing ones
-            const updatedFiles = [...selectedFiles, ...base64Files];
+            const updatedFiles = [...selectedFiles, ...base64OrBlobFiles];
 
             // Update session storage
             setSelectedFiles(updatedFiles);
@@ -42,7 +47,6 @@ const InputFilePost: React.FC<InputFilePostProps> = ({ onFilesSelected }) => {
         }
     };
 
-
     return (
         <div className=" bg-ig-elevated-background rounded-xl overflow-hidden">
             <LabelPost
@@ -55,7 +59,14 @@ const InputFilePost: React.FC<InputFilePostProps> = ({ onFilesSelected }) => {
                     <div className=""><MediaIcon className="" /></div>
                     <span className="text-xl">Kéo ảnh và video vào đây</span>
                     <div className="mt-3">
-                        <input type="file" multiple id="image-upload" className="hidden" onChange={handleFileChange} />
+                        <input
+                            type="file"
+                            accept="image/*,video/*" // Chấp nhận ảnh và video
+                            multiple
+                            id="image-upload"
+                            className="hidden"
+                            onChange={handleFileChange}
+                        />
                         <label
                             htmlFor="image-upload"
                             className="bg-ig-primary-button py-[7px] px-4 text-sm rounded-lg cursor-pointer hover:bg-ig-primary-button-hover"
@@ -69,4 +80,4 @@ const InputFilePost: React.FC<InputFilePostProps> = ({ onFilesSelected }) => {
     );
 };
 
-export default InputFilePost
+export default InputFilePost;

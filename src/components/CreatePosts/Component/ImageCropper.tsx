@@ -126,20 +126,19 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ step, setStep }) => {
                             />
                         )}
                     </div>
-                    <div className="absolute inset-y-0 left-0 flex items-center">
+                    <div className="absolute inset-y-0 left-2 flex items-center">
                         <button
                             onClick={handlePrev}
-                            disabled={currentIndex === 0}
-                            className="p-2 bg-gray-700/50 rounded-full cursor-pointer hover:bg-gray-500/50 disabled:opacity-50"
+                            className={`p-2 bg-black/50 rounded-full cursor-pointer hover:bg-black/60  ${currentIndex === 0 ? 'hidden' : ''}`}
                         >
                             <PrevIcon />
                         </button>
                     </div>
-                    <div className="absolute inset-y-0 right-0 flex items-center">
+                    <div className="absolute inset-y-0 right-2 flex items-center">
                         <button
                             onClick={handleNext}
                             disabled={currentIndex === selectedFiles.length - 1}
-                            className="p-2 bg-gray-700/50 rounded-full cursor-pointer hover:bg-gray-500/50 disabled:opacity-50"
+                            className={`p-2 bg-black/50 rounded-full cursor-pointer hover:bg-black/60  ${currentIndex === selectedFiles.length - 1 ? 'hidden' : ''}`}
                         >
                             <NextIcon />
                         </button>

@@ -17,10 +17,8 @@ const ItemSidebar: React.FC<ItemSidebarProps> = ({ icon, title, path, onClick, i
         <div className="xl:w-55 py-1">
             {path ? (
                 <Link to={path} onClick={onClick}>
-                    <div className={`xl:w-55 flex items-center justify-start p-3 cursor-pointer gap-4 hover:bg-gray-300/20 rounded-lg ${isActive ? 'activeItemSidebar  ' : ''}`}>
-
+                    <div className={`xl:w-55 flex items-center justify-start p-3 cursor-pointer gap-4 hover:bg-gray-300/20 rounded-lg ${isActive ? 'activeItemSidebar font-bold ' : ''}`}>
                         {icon}
-
                         <span className={`hidden xl:block`}>
                             {title}
                         </span>

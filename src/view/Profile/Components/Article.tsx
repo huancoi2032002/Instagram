@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CameraIcon, CommentIcon, FavouriteIcon, LoveIcon } from "~/assets";
 import CreatePost from "~/components/CreatePosts/CreatePost";
+import ItemPost from "~/components/Item/ItemPost/ItemPost";
 import './Styles.scss';
 import Ngoc1 from "~/assets/1.jpg";
 import Ngoc2 from "~/assets/2.jpg";
@@ -9,6 +10,29 @@ import Ngoc4 from "~/assets/4.jpg";
 import Ngoc5 from "~/assets/5.jpg";
 import Ngoc6 from "~/assets/6.jpg";
 import Ngoc7 from "~/assets/7.jpg";
+const dataImage = [
+    {
+        img: Ngoc1
+    },
+    {
+        img: Ngoc2
+    },
+    {
+        img: Ngoc3
+    },
+    {
+        img: Ngoc4
+    },
+    {
+        img: Ngoc5
+    },
+    {
+        img: Ngoc6
+    },
+    {
+        img: Ngoc7
+    },
+]
 
 const ItemArticle = () => {
     return (
@@ -57,18 +81,9 @@ const Article = () => {
             </div>
             <div className="w-full z-10">
                 <div className="grid grid-cols-3 gap-1">
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
-                    <ItemArticle />
+                    {dataImage.map(img => (
+                        <ItemPost img={img.img} />
+                    ))}
                 </div>
             </div>
         </div>

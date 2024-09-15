@@ -10,7 +10,7 @@ const OnclickText: React.FC<OnclickTextProps> = ({ initialLabel, activeLabel }) 
     const [isActive, setIsActive] = useState(false)
 
     const handleClick = () => {
-        setIsActive(true)
+        setIsActive(prev => !prev)
     }
 
     return (
@@ -19,3 +19,5 @@ const OnclickText: React.FC<OnclickTextProps> = ({ initialLabel, activeLabel }) 
         </div>
     )
 }
+
+export default OnclickText

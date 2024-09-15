@@ -110,10 +110,10 @@ const AddImagePost: React.FC<AddImagePostProps> = ({ onOpenAddImage, onImageAdd,
                                     <img src={img} className="w-full h-full object-cover" />
                                     {index === currentImageIndex && (
                                         <div
-                                            className="absolute top-0 right-3 cursor-pointer"
+                                            className="absolute w-5 h-5 flex items-center justify-center rounded-full bg-black/60 top-1 right-1 cursor-pointer"
                                             onClick={(e) => { e.stopPropagation(); handleDeleteImage(index); }}
                                         >
-                                            <VectorX />
+                                            <VectorX className="w-3 h-3" />
                                         </div>
                                     )}
                                 </div>
@@ -130,7 +130,7 @@ const AddImagePost: React.FC<AddImagePostProps> = ({ onOpenAddImage, onImageAdd,
                     )}
                 </div>
                 <div className="h-full">
-                    <input type="file" multiple id="image-upload" className="hidden" onChange={handleFileChange} />
+                    <input type="file" multiple id="image-upload"  className="hidden" onChange={handleFileChange} accept="image/*"/>
                     <label
                         className="h-[50px] w-[50px] flex items-center justify-center border-y border-y-ig-separator rounded-full cursor-pointer"
                         htmlFor="image-upload"
