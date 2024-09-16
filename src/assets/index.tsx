@@ -784,3 +784,251 @@ export const HiddenWordIcon: React.FC<SvgProps> = ({ className }) => (
     <path d="M12.596 20.797h-2.178l-.009-.039-.815-3.735H4.7l-.825 3.774H1.673l.014-.061L5.744 3.203h2.78l.01.038Zm-7.449-5.823h4L7.134 5.835Zm11.813 6.123a3.198 3.198 0 0 1-3.274-3.473c0-1.881 1.011-3.056 3.185-3.698l1.8-.524c.754-.212 1.163-.486 1.163-1.327a1.732 1.732 0 0 0-1.95-1.775 1.746 1.746 0 0 0-1.9 1.9v.524h-2.048V12.2a3.61 3.61 0 0 1 3.949-3.75c2.578 0 3.998 1.323 3.998 3.724v8.623h-2v-1.569a2.998 2.998 0 0 1-2.923 1.87Zm2.874-6.427a2.914 2.914 0 0 1-1.26.577l-1.126.325a1.996 1.996 0 0 0-1.714 1.976 1.565 1.565 0 0 0 1.675 1.7c2.189 0 2.425-2.237 2.425-3.199Z"></path>
   </svg>
 );
+
+export const AccountNotificationOffIcon: React.FC<SvgProps> = ({
+  className,
+}) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="m22.957 21.543-2.527-2.527a4.02 4.02 0 0 0 1.149-1.625 3.988 3.988 0 0 0-.273-3.371l-.484-.853a6.364 6.364 0 0 1-.82-3.17 7.953 7.953 0 0 0-4.746-7.302C14.51 1.642 13.292 1 12.001 1s-2.507.642-3.254 1.697A7.963 7.963 0 0 0 6.065 4.65L2.457 1.043a1 1 0 1 0-1.414 1.414l20.5 20.5a.997.997 0 0 0 1.414 0 1 1 0 0 0 0-1.414Zm-3.252-4.852c-.14.373-.385.68-.69.91L7.484 6.068a5.975 5.975 0 0 1 2.305-1.641 1 1 0 0 0 .493-.426A1.982 1.982 0 0 1 12.002 3c.71 0 1.353.375 1.72 1.002a.996.996 0 0 0 .493.425c2.3.914 3.786 3.1 3.786 5.634 0 1.434.374 2.85 1.081 4.094l.485.852c.298.526.348 1.124.138 1.684Zm-4.915 1.603a1 1 0 0 0-.707-.293H6.184c-.722 0-1.368-.372-1.73-.996s-.367-1.37-.01-1.996l.47-.823a8.344 8.344 0 0 0 1.093-4.171v-.09h-1l-1 .095a6.344 6.344 0 0 1-.83 3.175l-.47.823c-.714 1.253-.708 2.746.017 3.992s2.019 1.991 3.46 1.991h1.943a4.008 4.008 0 0 0 3.874 3 4.011 4.011 0 0 0 3.854-2.923.999.999 0 0 0-.256-.975l-.809-.81Zm-2.789 2.708a2.002 2.002 0 0 1-1.732-1.001h3.4l.041.041a2.01 2.01 0 0 1-1.709.96Z"></path>
+  </svg>
+);
+
+export const ContentOptionIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="m18.509 14.757-4.285-2.474a.857.857 0 0 0-1.286.743v4.948a.857.857 0 0 0 1.286.742l4.285-2.474a.857.857 0 0 0 0-1.485ZM5.225 3.977a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25ZM19.5 7.5h-3v-3a4.004 4.004 0 0 0-4-4h-8a4.004 4.004 0 0 0-4 4v8a4.004 4.004 0 0 0 4 4h3v3a4.004 4.004 0 0 0 4 4h8a4.004 4.004 0 0 0 4-4v-8a4.004 4.004 0 0 0-4-4Zm-12 7h-3a1.997 1.997 0 0 1-1.882-1.349l2.607-2.607L7.5 12.819Zm.23-4.28L6.41 8.9a1.679 1.679 0 0 0-2.37 0L2.5 10.44V4.5a2.003 2.003 0 0 1 2-2h8a2.003 2.003 0 0 1 2 2v3h-3a3.992 3.992 0 0 0-3.77 2.72ZM21.5 19.5a2.003 2.003 0 0 1-2 2h-8a2.003 2.003 0 0 1-2-2v-8a2.003 2.003 0 0 1 2-2h8a2.003 2.003 0 0 1 2 2Z"></path>
+  </svg>
+);
+
+export const LikeAndShareIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="m18.474 17.56.038-.033c2.338-2.004 4.988-4.276 4.988-7.87 0-3.947-3.01-7.157-6.708-7.157-1.97 0-3.546.692-4.797 2.11C10.735 3.192 9.162 2.5 7.21 2.5c-1.088 0-2.113.28-3.021.774L2.207 1.293A1 1 0 1 0 .793 2.707l20 20a.997.997 0 0 0 1.414 0 1 1 0 0 0 0-1.414l-3.733-3.733ZM7.209 4.5c1.887 0 2.936.898 3.674 1.919.84 1.16.98 1.741 1.12 1.741.14 0 .278-.58 1.11-1.745.732-1.023 1.768-1.915 3.679-1.915 2.596 0 4.708 2.313 4.708 5.156 0 2.736-2.156 4.522-4.445 6.485L5.705 4.791A4.179 4.179 0 0 1 7.209 4.5Zm6.18 14.944-1.053.928-.336.294-.336-.295-6.917-6.094A6.632 6.632 0 0 1 2.5 9.304c0-.41.05-.816.152-1.204a1 1 0 0 0-1.935-.504A6.8 6.8 0 0 0 .5 9.304a8.635 8.635 0 0 0 2.925 6.474l6.917 6.094c.472.417 1.065.625 1.658.625s1.186-.208 1.658-.625l1.053-.927a1 1 0 0 0-1.322-1.501Z"></path>
+  </svg>
+);
+
+export const SubscriptionPackageIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="M19.269 20H4.73a1 1 0 0 1-.973-.77L1.026 7.641A1 1 0 0 1 2.82 6.84a3.674 3.674 0 0 0 3.666 1.725c1.992-.308 3.74-2.13 4.56-4.754a1 1 0 0 1 1.908 0c.82 2.625 2.567 4.446 4.56 4.754A3.674 3.674 0 0 0 21.18 6.84a1 1 0 0 1 1.794.802L20.242 19.23a1 1 0 0 1-.973.77ZM5.523 18h12.954l1.857-7.878a5.439 5.439 0 0 1-3.126.419A7.506 7.506 0 0 1 12 6.611a7.506 7.506 0 0 1-5.208 3.93 5.437 5.437 0 0 1-3.126-.42Z"></path>
+  </svg>
+);
+
+export const StoreAndDownloadIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <line
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="2"
+      x1="11.914"
+      x2="11.914"
+      y1="15.195"
+      y2="2"
+    ></line>
+    <polyline
+      fill="none"
+      points="16.013 11.095 11.914 15.195 7.814 11.095"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    ></polyline>
+    <line
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="2"
+      x1="3.277"
+      x2="20.55"
+      y1="22"
+      y2="22"
+    ></line>
+  </svg>
+);
+
+export const LanguageIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="M13.25 5.124h-2.875v-.372a.875.875 0 0 0-1.75 0v.372H5.759a.875.875 0 1 0 0 1.75h.643a8.794 8.794 0 0 0 1.712 2.723 4.84 4.84 0 0 1-1.481.536.875.875 0 0 0 .116 1.742.891.891 0 0 0 .113-.007 6.982 6.982 0 0 0 2.659-1.081 6.99 6.99 0 0 0 2.608 1.08.87.87 0 0 0 .984-.741.878.878 0 0 0-.736-.992 4.846 4.846 0 0 1-1.453-.537 8.57 8.57 0 0 0 1.681-2.723h.645a.875.875 0 0 0 0-1.75Zm-3.73 3.41a6.78 6.78 0 0 1-1.196-1.66h2.37a6.583 6.583 0 0 1-1.175 1.66ZM20 5a1 1 0 0 0 0 2 1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-6a1 1 0 0 0-1 1v1.586l-2.293-2.293a1 1 0 0 0-1.414 1.414l4 4A1 1 0 0 0 15 22v-3h5a3.003 3.003 0 0 0 3-3V8a3.003 3.003 0 0 0-3-3Zm-5 10a3.003 3.003 0 0 0 3-3V4a3.003 3.003 0 0 0-3-3H4a3.003 3.003 0 0 0-3 3v8a3.003 3.003 0 0 0 3 3v3a1 1 0 0 0 1.625.781L10.351 15Zm-5.625-1.781L6 15.919V14a1 1 0 0 0-1-1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-5a1.002 1.002 0 0 0-.625.219Z"></path>
+  </svg>
+);
+
+export const PermissionWebsiteIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path
+      d="M3.642 16.11V6.033a1.192 1.192 0 0 1 1.192-1.192h13.433a1.192 1.192 0 0 1 1.192 1.192m-5.343 13.125H3.778A1.778 1.778 0 0 1 2 17.38v-1.27h11.917"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    ></path>
+    <path
+      d="M22 17.832v.16a1.322 1.322 0 0 1-.121.7.826.826 0 0 1-.343.345 1.316 1.316 0 0 1-.7.121h-2.755a1.315 1.315 0 0 1-.7-.121.826.826 0 0 1-.343-.344 1.321 1.321 0 0 1-.12-.7V10.2a1.321 1.321 0 0 1 .12-.7.826.826 0 0 1 .344-.344 1.315 1.315 0 0 1 .699-.122h2.755a1.315 1.315 0 0 1 .7.122.826.826 0 0 1 .343.343A1.322 1.322 0 0 1 22 10.2v7.632Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    ></path>
+  </svg>
+);
+
+export const MonitorIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg aria-label="" className={className} fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+    <title></title>
+    <path d="M12.931 4.132a3.5 3.5 0 1 1 2.575 5.871h-.06M22 17.546v-.688A3.858 3.858 0 0 0 18.143 13h-3.64" fill="none" stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2"></path>
+    <path d="M12.004 9.502a3.5 3.5 0 1 1-3.501-3.5 3.501 3.501 0 0 1 3.5 3.5Z" fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="2"></path>
+    <path d="M14.997 20.546v-.687A3.858 3.858 0 0 0 11.139 16H5.858A3.858 3.858 0 0 0 2 19.859v.687" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+  </svg>
+);
+
+export const ToolsAndAccountTypesIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="M8 12a1 1 0 0 0-1 1v3a1 1 0 1 0 2 0v-3a1 1 0 0 0-1-1Zm8-3a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0v-6a1 1 0 0 0-1-1Zm-4-2a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1Z"></path>
+    <path d="M18.44 1H5.567a4.565 4.565 0 0 0-4.56 4.56v12.873a4.565 4.565 0 0 0 4.56 4.56H18.44a4.565 4.565 0 0 0 4.56-4.56V5.56A4.565 4.565 0 0 0 18.44 1ZM21 18.433a2.563 2.563 0 0 1-2.56 2.56H5.567a2.563 2.563 0 0 1-2.56-2.56V5.56A2.563 2.563 0 0 1 5.568 3H18.44A2.563 2.563 0 0 1 21 5.56v12.873Z"></path>
+  </svg>
+);
+
+export const HelpIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path d="M12 .5A11.5 11.5 0 1 0 23.5 12 11.513 11.513 0 0 0 12 .5Zm5.786 14.458a6.486 6.486 0 0 0 0-5.916l2.188-2.188a9.438 9.438 0 0 1 0 10.292Zm-8.968.224A4.499 4.499 0 1 1 12 16.5a4.468 4.468 0 0 1-3.182-1.318Zm8.328-11.156-2.188 2.188a6.485 6.485 0 0 0-5.916 0L6.854 4.026a9.438 9.438 0 0 1 10.292 0ZM4.026 6.855l2.188 2.187a6.486 6.486 0 0 0 0 5.916l-2.188 2.187a9.438 9.438 0 0 1 0-10.29Zm2.828 13.119 2.188-2.188a6.486 6.486 0 0 0 5.916 0l2.188 2.188a9.438 9.438 0 0 1-10.292 0Z"></path>
+  </svg>
+);
+
+export const PrivacyCenterIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path
+      d="M3 13.5a9 9 0 0 0 18 0V4.488A17.848 17.848 0 0 1 12 1.5a17.848 17.848 0 0 1-9 2.988Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    ></path>
+    <path
+      d="m11.283 7.925-.934 2.094-2.403.277a.785.785 0 0 0-.425 1.372l1.808 1.572-.523 2.342a.785.785 0 0 0 1.177.839L12 15.18l2.017 1.241a.785.785 0 0 0 1.177-.84l-.523-2.341 1.808-1.572a.785.785 0 0 0-.425-1.372l-2.403-.277-.934-2.094a.785.785 0 0 0-1.434 0Z"
+      fillRule="evenodd"
+    ></path>
+  </svg>
+);
+
+export const AccountStatusIcon: React.FC<SvgProps> = ({ className }) => (
+  <svg
+    aria-label=""
+    className={className}
+    fill="currentColor"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+  >
+    <title></title>
+    <path
+      d="M2.667 22v-1.355a5.271 5.271 0 0 1 5.271-5.271h8.124a5.271 5.271 0 0 1 5.271 5.271V22"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="2"
+    ></path>
+    <circle
+      cx="12"
+      cy="7.268"
+      fill="none"
+      r="5"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="2"
+    ></circle>
+  </svg>
+);
