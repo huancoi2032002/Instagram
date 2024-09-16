@@ -7,6 +7,7 @@ const Home = () => {
             <div className="h-screen w-full">
                 <FeedPosts />
             </div>
+            <div></div>
         </LayoutMain>
     )
 }
