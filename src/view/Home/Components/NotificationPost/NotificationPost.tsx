@@ -66,8 +66,8 @@ const NotificationPost:React.FC<NotificationPostProps> = ({onClose}) => {
         return item
     })
     const getClassName = (index: number) => {
-        let startIndex = 0;
-        let endIndex = dataLabel.length - 2;
+        const startIndex = 0;
+        const endIndex = dataLabel.length - 2;
 
         if (index >= startIndex && index <= endIndex) {
             return 'border-b border-white/10';

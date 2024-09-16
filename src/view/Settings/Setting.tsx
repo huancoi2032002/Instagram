@@ -1,7 +1,8 @@
 import React from "react";
 import LayoutMain from "~/layouts/LayoutMain";
-import { BellIcon, HiddenIcon, LockIcon, StarIcon, UserIcon } from "~/assets";
+import { BellIcon, CommentIcon, HiddenIcon, HiddenWordIcon, LimitedAccountIcon, LockIcon, ShareIcon2, StarIcon, TagIcon, UserIcon } from "~/assets";
 import { Link } from "react-router-dom";
+import { MessengerIcon } from "~/assets/SidebarIcon";
 
 interface SettingProps {
     icon: React.ReactNode
@@ -47,6 +48,17 @@ const Setting = () => {
                     <ItemSetting icon={<BellIcon />} title="Bạn thân" />
                     <ItemSetting icon={<StarIcon />} title="Đã chặn" />
                     <ItemSetting icon={<HiddenIcon />} title="Ẩn tin và video trực tiếp" />
+                </div>
+                <div>
+                    <div className="w-[247px] py-3 px-4 ">
+                        <span  className="text-xs text-ig-secondary-text">Cách người khác có thể tương tác với bạn</span>
+                    </div>
+                    <ItemSetting icon={<MessengerIcon />} title="Tin nhắn và lượt phản hồi tin" />
+                    <ItemSetting icon={<TagIcon />} title="Thẻ và lượt nhắc" />
+                    <ItemSetting icon={<CommentIcon />} title="Bình luận" />
+                    <ItemSetting icon={<ShareIcon2 />} title="Chia sẻ" />
+                    <ItemSetting icon={<LimitedAccountIcon />} title="Tài khoản bị hạn chế" />
+                    <ItemSetting icon={<HiddenWordIcon />} title="Từ bị ẩn" />
                 </div>
             </div>
         </LayoutMain>

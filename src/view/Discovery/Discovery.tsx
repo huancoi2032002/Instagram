@@ -53,6 +53,9 @@ const dataImage = [
     {
         img: Ngoc7
     },
+    {
+        img: Ngoc1
+    },
 ]
 
 function generateSpecialIndices(start: number, limit: number): number[] {
