@@ -1,9 +1,7 @@
 
-interface DropDownSexProps {
-    value: string;
-}
 
-const DropDownSex: React.FC<DropDownSexProps> = () => {
+
+const DropDownSex = () => {
     return (
         <div className="w-[366px] h-auto py-[10px] bg-ig-elevated-background rounded-[20px]">
             <div className="cursor-pointer w-full py-4 px-6 flex items-center justify-between">

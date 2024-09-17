@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { IUser } from "~/store/User/User";
 import ngoc1 from "~/assets/1.jpg";
-import { SetingDropIcon } from "~/assets/SettingIcon";
 import { DownArrowIcon } from "~/assets";
 import DropDownSex from "./DropDownSex";
 import "./Styles.scss";
