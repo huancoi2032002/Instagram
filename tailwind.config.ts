@@ -14,8 +14,8 @@ export default {
         'ig-primary-button': '#0095F6',
         'ig-primary-button-hover': '#1877F2',
         'ig-second-button': '#1A1A1A',
-        'ig-bg-button': '#363636'
-        
+        'ig-bg-button': '#363636',
+        'ig-hightlight-background': '#262626'
       },
       textColor: {
         'ig-primary-text': '#F5F5F5',
