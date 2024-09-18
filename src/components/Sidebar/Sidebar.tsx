@@ -8,7 +8,7 @@ import './Sidebar.scss';
 import Search from '../Search/Search';
 import ItemSidebar from './Components/ItemSidebar';
 import Notification from '../Notification/Notification';
-import SettingDrop from '../Setting/SettingDrop/SettingDrop';
+import SettingDrop from '~/view/Settings/Components/SettingDrop';
 import CreatePost from '../CreatePosts/CreatePost';
 
 

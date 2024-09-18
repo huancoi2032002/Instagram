@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/discovery" element={<Discovery />} />
         <Route path="/profile/*" element={<Profile />} /> {/* Add the trailing "*" */}
-        <Route path="/setting" element={<Setting />} />
+        <Route path="/setting/*" element={<Setting />} />
       </Routes>
     </>
   );

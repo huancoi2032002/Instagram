@@ -1,18 +1,18 @@
 import { SetingDropIcon, ActivityIcon, SwitchIcon, ReportIcon } from "~/assets/SettingIcon";
 import { SavedIcon } from "~/assets";
-import ItemSetting from "./Components/ItemSetting"
+import ItemSetting from "./ItemSetting";
 
 
 const dataItemSetting = [
     {
         icon: <SetingDropIcon className="" />,
         title: 'Cài đặt',
-        path: "/edit",
+        path: "/setting/edit",
     },
     {
         icon: <ActivityIcon className="" />,
         title: 'Hoạt động của bạn',
-        path: 'your_activity',
+        path: '/your_activity',
     },
     {
         icon: <SavedIcon className="" />,
