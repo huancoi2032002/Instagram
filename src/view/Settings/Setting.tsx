@@ -28,6 +28,7 @@ import {
 import { Link } from "react-router-dom";
 import { MessengerIcon } from "~/assets/SidebarIcon";
 import UserEdit from "./Components/UserEdit";
+import './Components/Styles.scss'
 
 interface SettingProps {
     icon: React.ReactNode;
@@ -53,9 +54,9 @@ const ItemSetting: React.FC<SettingProps> = ({ icon, title, link }) => {
 const Setting = () => {
     return (
         <LayoutMain>
-            <div className="flex">
-                <div className="flex flex-col gap-3 px-8">
-                    <div>
+            <div className="flex h-screen w-full">
+                <div className="h-screen flex flex-col gap-3 px-8 overflow-y-auto w-[400px] custom-scrollbar">
+                    <div className="w-auto">
                         <div className="w-[247px] py-3 px-4 ">
                             <span className="text-xs text-ig-secondary-text">
                                 Cách bạn dùng Instagram
@@ -175,7 +176,7 @@ const Setting = () => {
                         />
                     </div>
                 </div>
-                <div className="w-full">
+                <div className="w-full overflow-y-auto flex justify-center custom-scrollbar">
                     <UserEdit UserID={""} UserAvatar={""} />
                 </div>
             </div>

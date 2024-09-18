@@ -7,7 +7,7 @@ const dataItemSetting = [
     {
         icon: <SetingDropIcon className="" />,
         title: 'Cài đặt',
-        path: "/setting",
+        path: "/edit",
     },
     {
         icon: <ActivityIcon className="" />,

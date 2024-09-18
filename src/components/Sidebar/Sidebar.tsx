@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Logo, LogoMobile } from '~/assets/logo';
-import { HomeIcon, SearchIcon, DiscoveryIcon, ReelIcon, MessengerIcon, NotificationIcon, PlusIcon, SettingIcon } from '~/assets/SidebarIcon';
+import { HomeIcon, SearchIcon, DiscoveryIcon, ReelIcon, NotificationIcon, PlusIcon, SettingIcon } from '~/assets/SidebarIcon';
+import { ShareIcon } from '~/assets';
 import Avatar from '~/assets/avatar.jpg';
 import { Link } from 'react-router-dom';
 import './Sidebar.scss';
@@ -32,7 +33,7 @@ const dataSidebar = [
         path: "/reels"
     },
     {
-        icon: <MessengerIcon className="" />,
+        icon: <ShareIcon className="" />,
         title: "Tin nhắn",
         path: "/messenger"
     },

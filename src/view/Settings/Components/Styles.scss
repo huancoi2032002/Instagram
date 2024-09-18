@@ -20,8 +20,25 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #323539;
+    background-color: #000;
     -webkit-tap-highlight-color: transparent;
     -webkit-transition: .4s;
     transition: .4s;
+}
+
+/* For the entire scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    background-color: #262626;
+}
+
+/* The part of the scrollbar that can be clicked and dragged */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #7B7B7B; /* Change the color */
+    border-radius: 10px; /* Make it rounded */
+}
+
+/* The background behind the scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #262626; /* Color of the scrollbar track */
 }
