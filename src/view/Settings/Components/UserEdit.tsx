@@ -13,7 +13,7 @@ const UserEdit: React.FC<IUser> = () => {
     };
 
     return (
-        <div className="w-full flex items-center justify-center overflow-y-auto custom-scrollbar">
+        <div className="w-full flex justify-center overflow-y-auto custom-scrollbar">
             <div className="max-w-[610px]">
                 <div className="py-9 mb-4 max-w-[610px] w-full">
                     <div className="py-3 mb-8">
