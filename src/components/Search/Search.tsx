@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { SearchIcon, VectorX } from "~/assets";
-import ItemsUser from "../ItemUser/ItemsUser";
+import ItemsUser from "../Item/ItemUser/ItemsUser";
 import Avatar from '~/assets/1.jpg';
 
 
