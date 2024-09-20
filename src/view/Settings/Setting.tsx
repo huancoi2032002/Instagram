@@ -1,4 +1,3 @@
-import React from "react";
 import LayoutMain from "~/layouts/LayoutMain";
 import UserEdit from "./Components/UserEdit";
 import './Components/Styles.scss'

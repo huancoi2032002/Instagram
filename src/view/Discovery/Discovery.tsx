@@ -106,8 +106,8 @@ const Discovery = () => {
 
     return (
         <LayoutMain>
-            <div className="w-full h-full flex justify-center">
-                <div className="max-w-[975px] w-full mt-6">
+            <div className="w-full h-full flex justify-center py-6">
+                <div className="max-w-[975px] w-full">
                     <div className="grid grid-cols-3 gap-1">
                         {dataImage.map((img, index) => (
                             <ItemPost

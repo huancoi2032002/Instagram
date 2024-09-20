@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import ItemSetting from "./ItemSetting";
 import {
     AccountNotificationOffIcon,

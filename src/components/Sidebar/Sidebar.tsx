@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Logo, LogoMobile } from '~/assets/logo';
 import { HomeIcon, SearchIcon, DiscoveryIcon, ReelIcon, NotificationIcon, PlusIcon, SettingIcon } from '~/assets/SidebarIcon';
 import { ShareIcon } from '~/assets';
@@ -52,7 +52,7 @@ const dataSidebar = [
     },
 ];
 
-const Sidebar = () => {
+const Sidebar:React.FC = ({}) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isSettingDropOpen, setIsSettingDropOpen] = useState(false);

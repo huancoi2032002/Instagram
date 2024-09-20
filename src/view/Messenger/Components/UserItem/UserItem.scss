@@ -1,0 +1,31 @@
+.checkbox-custom {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ffffff80;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-custom::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.checkbox-custom.bg-white::before {
+    background-color: white;
+    content: '✔';
+    color: black;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

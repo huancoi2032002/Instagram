@@ -7,15 +7,16 @@ type TSettingDrop = {
     title: string;
     path?: string;
     className?: string; // Add className to props
+    onClick?: () => void
 };
 
-const ItemSetting: React.FC<TSettingDrop> = ({ icon, title, path = "", className = "" }) => {
+const ItemSetting: React.FC<TSettingDrop> = ({ icon, title, path = "", className = "", onClick }) => {
     const location = useLocation();
     const isActive = location.pathname === path;
 
     return (
         <Link to={path}>
-            <div className={`w-[250px] flex items-center gap-3 p-4 hover:bg-gray-400/20 rounded-lg cursor-pointer text-sm ${isActive ? className : ""}`}>
+            <div className={`w-[250px] flex items-center gap-3 p-4 hover:bg-gray-400/20 rounded-lg cursor-pointer text-sm ${isActive ? className : ""}`} onClick={onClick}>
                 <div>{icon}</div>
                 <div>{title}</div>
             </div>

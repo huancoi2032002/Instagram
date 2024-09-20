@@ -1,17 +1,35 @@
+import React, { useEffect, useRef } from "react";
 import { VectorX } from "~/assets";
 import { Logo } from "~/assets/logo";
 
+type SwitchAccountProps = {
+    onClose: () => void
+}
 
-const SwitchAccount = () => {
+const SwitchAccount:React.FC<SwitchAccountProps> = ({onClose}) => {
+
+    const switchAccountRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClose = (event: MouseEvent) => {
+            if(switchAccountRef.current && !switchAccountRef.current.contains(event.target as Node)){
+                onClose()
+            }
+        }
+        document.addEventListener('mousedown', handleClose)
+
+        return () => document.removeEventListener('mousedown', handleClose)
+    })
+
     return (
-        <div>
-            <div className="w-[400px] h-auto py-[10px] bg-ig-elevated-background rounded-[20px]">
-                <div className="w-full flex justify-end pr-5 mt-2 cursor-pointer">
+        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+            <div className="w-[400px] h-auto py-[10px] bg-ig-elevated-background rounded-[20px]" ref={switchAccountRef}>
+                <div className="w-full flex justify-end pr-5 mt-2 cursor-pointer" onClick={onClose}>
                     <VectorX />
                 </div>
                 <div>
                     <div className="w-full h-auto flex justify-center">
-                        <Logo />
+                        <Logo className="w-175" />
                     </div>
                     <div className="flex flex-col mt-12">
                         <div className="flex justify-center">

@@ -5,4 +5,5 @@ export interface IUser {
     label?: string
     suggestions?: string
     location?: string
+    isActive?: boolean
 }
