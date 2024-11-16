@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { LoveIcon, CommentIcon, FavouriteIcon, ShareIcon, SavedIcon, EmojisIcon } from "~/assets";
 import './Post.scss'
+import Comment from "../Comment/Comment";
 
 interface PostFooterProps {
     username: string
@@ -12,6 +13,7 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(1000);
     const [saveds, setSaveds] = useState(false);
+    const [openComment, setOpenComment] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [comment, setComment] = useState("")
 
@@ -47,8 +49,14 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
         }
     }
 
+    const handleOpenComment = () => {
+        setOpenComment(prev => !prev)
+    }
+    const handleCloseComment = () => {
+        setOpenComment(prev => !prev)
+    }
     return (
-        <div className="flex flex-col gap-1 border-b border-white/20 pb-5">
+        <div className="flex flex-col gap-1 border-b border-white/20 pb-5 relative">
             <div className="flex items-center justify-between w-full mb-2 mt-4">
                 <div className="flex items-center gap-4">
                     <div onClick={handleLike} className="cursor-pointer text-xl hover:text-white/60">
@@ -78,11 +86,14 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
                     <span className="font-normal">{titlePost}</span>
                 </p>
 
-                <p className="text-sm text-gray-500 cursor-pointer">
+                <p className="text-sm text-gray-500 cursor-pointer" onClick={handleOpenComment}>
                     Xem tất cả 3.213 bình luận
                 </p>
-            </>
 
+            </>
+            {openComment && (
+                <Comment onClose={handleCloseComment} />
+            )}
 
             <div className="flex items-center gap-2 justify-between w-full">
                 <div className="relative h-auto w-full flex items-center">

@@ -19,7 +19,7 @@ const dataSlideShow: {image: string}[] = [
     { image: ScreenShot4 }
 ]
 
-const Login = (src: string) => {
+const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [inputText, setInputText] = useState("");
