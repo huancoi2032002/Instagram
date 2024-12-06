@@ -12,7 +12,7 @@ import ScreenShot3 from '~/assets/screenshot/screenshot3.png';
 import ScreenShot4 from '~/assets/screenshot/screenshot4.png';
 import './Login.scss';
 
-const dataSlideShow: {image: string}[] = [
+const dataSlideShow: { image: string }[] = [
     { image: ScreenShot1 },
     { image: ScreenShot2 },
     { image: ScreenShot3 },
@@ -24,6 +24,12 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [inputText, setInputText] = useState("");
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        mobileNumberOrEmailOrUsername: "",
+        password: "",
+    });
+    const [errorMessage, setErrorMessage] = useState("");
     const totalSlides = dataSlideShow.length
 
 
@@ -45,6 +51,54 @@ const Login = () => {
         setInputText(event.target.value)
     }
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (isSubmitting) return;
+        setErrorMessage("");
+
+        if (!formData.mobileNumberOrEmailOrUsername.trim()) {
+            setErrorMessage("Vui lòng nhập email hoặc số điện thoại.");
+            return;
+        }
+        if (!formData.password.trim()) {
+            setErrorMessage("Vui lòng nhập mật khẩu.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Gửi yêu cầu tới API
+            const response = await fetch("https://dacnbe.onrender.com/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json(); // Parse JSON từ API
+            console.log(result);
+            if (response.ok) {
+                alert("Đăng nhập thành công!");
+                localStorage.setItem("authToken", result.user.accessToken); // Lưu token
+                localStorage.setItem("userID", result.user._id);
+                window.location.href = "/"; // Chuyển hướng
+            } else {
+                setErrorMessage(result.message || "Đăng nhập thất bại. Vui lòng thử lại.");
+            }
+        } catch (error) {
+            setErrorMessage("Không thể kết nối tới máy chủ. Vui lòng thử lại.");
+        } finally {
+            setIsSubmitting(false); // Kết thúc trạng thái gửi dữ liệu
+        }
+    };
+
     return (
         <section className="w-full h-screen flex flex-col items-center justify-center">
             <main className="w-full h-full flex items-center justify-center">
@@ -59,7 +113,7 @@ const Login = () => {
                                 className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
                                     }`}
                             >
-                                <img src={slide.image} alt={`Slide ${index + 1}`}  />
+                                <img src={slide.image} alt={`Slide ${index + 1}`} />
                             </div>
                         ))}
                     </div>
@@ -70,14 +124,24 @@ const Login = () => {
                             <LogoXL />
                         </div>
                         <form className="w-full flex flex-col items-center mb-6">
+                            {errorMessage && <p className="text-red-500 text-xs">{errorMessage}</p>}
                             <div className="flex flex-col gap-5 mt-4 mb-4">
                                 <div className="input-data h-10">
-                                    <input type="text" className="" required />
+                                    <input type="text" className="" required value={formData.mobileNumberOrEmailOrUsername} onChange={handleChange} name="mobileNumberOrEmailOrUsername" />
                                     <div className="underline"></div>
                                     <label htmlFor="">Số điện thoại, tên người dùng hoặc email</label>
                                 </div>
+
                                 <div className="input-data h-10">
-                                    <input type={`${showPassword ? 'text' : 'password'}`} className="" required onInput={handleIpnut} />
+                                    <input
+                                        type={`${showPassword ? 'text' : 'password'}`}
+                                        className=""
+                                        required
+                                        onInput={handleIpnut}
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        name="password"
+                                    />
                                     <div className="underline"></div>
                                     <label htmlFor="">Mật khẩu</label>
                                     <div className="absolute right-1">
@@ -88,7 +152,7 @@ const Login = () => {
                                 </div>
                             </div>
                             <div className="w-full py-2 flex items-center justify-center">
-                                <button className="w-[268px] text-xs bg-ig-primary-button py-2 px-4 rounded-lg hover:bg-ig-primary-button-hover">Đăng nhập</button>
+                                <button className="w-[268px] text-xs bg-ig-primary-button py-2 px-4 rounded-lg hover:bg-ig-primary-button-hover" onClick={handleSubmit} disabled={isSubmitting} >{isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}</button>
                             </div>
                             <div className="w-[268px] h-10 flex items-center">
                                 <div className="flex-shrink flex-grow h-[1px] bg-ig-separator/20"></div>

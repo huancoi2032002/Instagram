@@ -3,9 +3,9 @@ import Switch from "~/components/Switch/Switch";
 import ItemUserMessenger from "../ItemUserMessenger/ItemUserMessenger";
 import NgocDiep from '~/assets/5.jpg';
 import React from "react";
-import { IUser } from "~/store/User/User";
+import { User } from "~/store/User/User";
 
-const DetailUser: React.FC<IUser> = ({ UserAvatar, UserID, UserName }) => {
+const DetailUser: React.FC<User> = ({ UserAvatar, UserID, UserName }) => {
     return (
         <div className="w-full px-6 py-4 hover:bg-ig-elevated-background/50">
             <div className="w-full h-11 flex justify-between items-center cursor-pointer">

@@ -3,13 +3,18 @@ import { CallIcon, EmojisIcon, FavouriteIcon, ImageIcon, InfomationFocusIcon, In
 import { IUser } from "~/store/User/User";
 import DetailChat from "./DetailChat";
 
-
+interface FilePreview {
+    name: string;
+    type: string;
+    preview: string;
+}
 
 const ChatWithFriend: React.FC<IUser> = ({ UserAvatar, UserID, UserName, isActive }) => {
 
     const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
     const [messenger, setMessenger] = useState("");
     const [openDetailChat, setOpenDetailChat] = useState(false);
+    const [isSelectImage, setIsSelectImage] = useState<FilePreview[]>([]);
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessenger(event.target.value)
@@ -25,6 +30,34 @@ const ChatWithFriend: React.FC<IUser> = ({ UserAvatar, UserID, UserName, isActiv
     const handleOpenDetailChat = () => {
         setOpenDetailChat(prev => !prev)
     }
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+
+        if (!files) {
+            console.warn("Không có tệp nào được chọn.");
+            return;
+        }
+
+        try {
+            // Chuyển FileList thành mảng
+            const fileArray = Array.from(files);
+            // Tạo URL blob để hiển thị trước hình ảnh/video
+            const previewFiles = fileArray.map(file => ({
+                name: file.name,
+                type: file.type,
+                preview: URL.createObjectURL(file),
+            }));
+            setIsSelectImage(previewFiles); // Lưu thông tin file vào state
+        } catch (error) {
+            console.error("Có lỗi xảy ra khi xử lý tệp:", error);
+        }
+    };
+
+    const handleRemoveImage = (index: number) => {
+        setIsSelectImage(prev => prev.filter((_, i) => i !== index));
+    };
+
 
     return (
         <div className={`grid ${openDetailChat ? "mx:grid-cols-4 grid-cols-5" : "grid-cols-1"} h-screen`}>
@@ -80,36 +113,71 @@ const ChatWithFriend: React.FC<IUser> = ({ UserAvatar, UserID, UserName, isActiv
                         </div>
                     </div>
                 </div>
-                <div className="w-full h-[78px]">
+                <div className="w-full h-auto mb-2">
                     <div className="w-full px-4 h-full flex items-center">
-                        <div className="min-h-11 w-full flex items-center px-4 border border-white/20 rounded-3xl">
-                            <div>
-                                <EmojisIcon className="w-6 h-6 text-white" />
-                            </div>
-                            <div className="flex-grow h-auto flex items-center">
-                                <textarea
-                                    ref={textAreaRef}
-                                    className="h-5 max-h-[124px] w-full outline-none resize-none bg-transparent overflow-y-auto pl-4 placeholder:text-ig-secondary-text text-ig-secondary-text"
-                                    placeholder="Nhắn tin..."
-                                    onInput={handleInputTextarea}
-                                    onChange={handleChangeInput}
-                                    style={{ lineHeight: '1.5' }}
-                                />
-                            </div>
-                            {messenger.trim() ? (
-                                <button className="text-ig-primary-button">Gửi</button>
-                            ) : (
-
-                                <div className="flex">
-                                    <div className="p-2"><MicIcon /></div>
-                                    <div className="p-2"><ImageIcon /></div>
-                                    <div className="p-2"><LoveIcon /></div>
+                        <div className="min-h-11 w-full flex flex-col px-4 border border-white/20 rounded-3xl">
+                            <div className="flex items-center">
+                                <div>
+                                    <EmojisIcon className="w-6 h-6 text-white" />
                                 </div>
-                            )
-                            }
+                                <div className="flex-grow h-auto flex items-center">
+                                    <textarea
+                                        ref={textAreaRef}
+                                        className="h-5 max-h-[124px] w-full outline-none resize-none bg-transparent overflow-y-auto pl-4 placeholder:text-ig-secondary-text text-ig-secondary-text"
+                                        placeholder="Nhắn tin..."
+                                        onInput={handleInputTextarea}
+                                        onChange={handleChangeInput}
+                                        style={{ lineHeight: '1.5' }}
+                                    />
+                                </div>
+                                {messenger.trim() ? (
+                                    <button className="text-ig-primary-button">Gửi</button>
+                                ) : (
+                                    <div className="flex">
+                                        <div className="p-2"><MicIcon /></div>
+                                        <div className="p-2">
+                                            <input
+                                                type="file"
+                                                accept="image/*,video/*" // Chấp nhận ảnh và video
+                                                multiple
+                                                id="image-upload"
+                                                className="hidden"
+                                                onChange={handleFileChange}
+                                            />
+                                            <label
+                                                htmlFor="image-upload"
+                                                className="cursor-pointer"
+                                            >
+                                                <ImageIcon />
+                                            </label>
+                                        </div>
+                                        <div className="p-2"><LoveIcon /></div>
+                                    </div>
+                                )}
+                            </div>
+                            {isSelectImage && isSelectImage.length > 0 && (
+                                <div className="mt-2 ml-10 mb-2 flex gap-2">
+                                    {isSelectImage.map((file, index) => (
+                                        <div key={index} className="relative">
+                                            <img
+                                                src={file.preview}
+                                                alt={file.name}
+                                                className="w-16 h-16 rounded-md object-cover"
+                                            />
+                                            <button
+                                                className="absolute top-0 right-0 bg-ig-bg-button text-white rounded-full w-5 h-5"
+                                                onClick={() => handleRemoveImage(index)}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
+
             </div>
             {openDetailChat && (
                 <div className="mx:col-span-1 min-w-[249px]">

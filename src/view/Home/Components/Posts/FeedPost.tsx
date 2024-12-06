@@ -8,11 +8,15 @@ interface FeedPostProps {
     images: string[];
     username: string;
     avatar: string;
-    titlePost: string
+    title: string
+    likeNum: number
+    commentNum: number
+    createdAt: string
+    postId: string;
 }
 
 
-const FeedPost: React.FC<FeedPostProps> = ({ images, username, avatar, titlePost }) => {
+const FeedPost: React.FC<FeedPostProps> = ({ images, username, avatar, title, likeNum, commentNum, createdAt, postId }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
 
@@ -37,7 +41,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ images, username, avatar, titlePost
     return (
         <div className="relative">
             <div className="max-w-[468px]">
-                <PostHeader username={username} avatar={avatar} />
+                <PostHeader username={username} avatar={avatar} createdAt={createdAt} />
                 <div className="w-[468px] h-auto my-2 rounded-lg overflow-hidden relative">
                     {images.length > 0 && (
                         <img
@@ -73,7 +77,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ images, username, avatar, titlePost
                         ))}
                     </div>
                 </div>
-                <PostFooter titlePost={titlePost} username="Huan" />
+                <PostFooter title={title} username={username} likeNum={likeNum} commentNum={commentNum} images={images} avatar={avatar} postId={postId} createdAt={createdAt}/>
             </div>
         </div>
     );

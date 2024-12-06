@@ -1,39 +1,94 @@
 import React, { useRef, useState } from "react";
-import { LoveIcon, CommentIcon, FavouriteIcon, ShareIcon, SavedIcon, EmojisIcon } from "~/assets";
-import './Post.scss'
-import Comment from "../Comment/Comment";
+import { LoveIcon, FavouriteIcon, CommentIcon, ShareIcon, SavedIcon, EmojisIcon } from "~/assets";
+import './Post.scss';
+import Comment from "../../../../components/Comment/Comment";
 
 interface PostFooterProps {
-    username: string
-    titlePost: string
-    textInput?: string
+    username: string;
+    title: string;
+    textInput?: string;
+    likeNum: number;
+    commentNum: number;
+    images: string[];
+    avatar: string;
+    postId: string; // add postId to make API call
+    createdAt: string
 }
 
-const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
+const PostFooter: React.FC<PostFooterProps> = ({ username, title, likeNum, commentNum, images, avatar, postId, createdAt }) => {
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(1000);
+    const [likes, setLikes] = useState(likeNum);  // Initialize with the current number of likes
     const [saveds, setSaveds] = useState(false);
     const [openComment, setOpenComment] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState("");
 
-    const handleLike = () => {
-        if (liked) {
-            setLiked(false);
-            setLikes(likes - 1);
-        } else {
-            setLiked(true);
-            setLikes(likes + 1);
+    const handleLike = async () => {
+        const userId = localStorage.getItem('userID');
+        const token = localStorage.getItem('authToken');
+        if (!userId) {
+            console.error('User is not logged in');
+            window.location.href = "/login";
+            return;
+        }
+
+
+        try {
+            const response = await fetch(`https://dacnbe.onrender.com/post/likePost?postId=${postId}&userId=${userId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "*/*",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Connection": "keep-alive",
+                    "token": `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                setLiked((prev) => !prev); // Toggle like state
+                setLikes((prev) => (liked ? prev - 1 : prev + 1)); // Adjust likes count based on previous state
+            } else {
+                console.error('Failed to like the post');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
     };
 
-    const handleSaved = () => {
-        setSaveds(prev => !prev)
+    const handleGetComment = async() => {
+        const token = localStorage.getItem('authToken');
+        try {
+            const response = await fetch(`https://dacnbe.onrender.com/postComment/getComment?postId=${postId}&skip=0`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "*/*",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Connection": "keep-alive",
+                    "token": `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                setOpenComment(prev => !prev);
+                console.log(postId);
+                
+            } else {
+                console.error('Failed to comment the post');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
+    const handleSaved = () => {
+        setSaveds(prev => !prev);
+    };
+
     const handleChangeInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setComment(event.target.value)
-    }
+        setComment(event.target.value);
+    };
 
     const handleInput = () => {
         const textarea = textareaRef.current;
@@ -47,14 +102,16 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
                 textarea.style.overflowY = "scroll";
             }
         }
-    }
+    };
 
     const handleOpenComment = () => {
-        setOpenComment(prev => !prev)
-    }
+        setOpenComment(prev => !prev);
+    };
+
     const handleCloseComment = () => {
-        setOpenComment(prev => !prev)
-    }
+        setOpenComment(prev => !prev);
+    };
+
     return (
         <div className="flex flex-col gap-1 border-b border-white/20 pb-5 relative">
             <div className="flex items-center justify-between w-full mb-2 mt-4">
@@ -62,7 +119,7 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
                     <div onClick={handleLike} className="cursor-pointer text-xl hover:text-white/60">
                         {!liked ? <LoveIcon /> : <FavouriteIcon className="fill-red-600" />}
                     </div>
-                    <div className="cursor-pointer text-xl hover:text-white/60">
+                    <div className="cursor-pointer text-xl hover:text-white/60" onClick={handleGetComment}>
                         <CommentIcon className="" />
                     </div>
                     <div className="cursor-pointer text-xl hover:text-white/60">
@@ -78,21 +135,19 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
                 </div>
             </div>
 
-
             <p className="text-sm font-semibold">{likes} likes</p>
             <>
                 <p className="text-sm font-bold">
                     {username}{" "}
-                    <span className="font-normal">{titlePost}</span>
+                    <span className="font-normal">{title}</span>
                 </p>
 
-                <p className="text-sm text-gray-500 cursor-pointer" onClick={handleOpenComment}>
-                    Xem tất cả 3.213 bình luận
+                <p className="text-sm text-gray-500 cursor-pointer" onClick={handleGetComment}>
+                    {commentNum}
                 </p>
-
             </>
             {openComment && (
-                <Comment onClose={handleCloseComment} />
+                <Comment onClose={handleCloseComment} username={username} images={images} avatar={avatar} postId={postId} likeNum={likeNum} createdAt={createdAt}/>
             )}
 
             <div className="flex items-center gap-2 justify-between w-full">
@@ -105,7 +160,7 @@ const PostFooter: React.FC<PostFooterProps> = ({ username, titlePost }) => {
                         onChange={handleChangeInput}
                     />
                     {comment.trim() && (
-                        <button className=" text-blue-500 text-sm font-semibold hover:text-white transition-colors">
+                        <button className="text-blue-500 text-sm font-semibold hover:text-white transition-colors">
                             Đăng
                         </button>
                     )}
