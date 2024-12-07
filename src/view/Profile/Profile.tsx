@@ -3,55 +3,87 @@ import Avatar from '~/assets/avatar.jpg';
 import './Profile.scss';
 import Button from "~/components/Button/Button";
 import { SetingDropIcon } from "~/assets/SettingIcon";
-import { PlusIcon, PostIcon, SavedIcon, UserTagIcon } from "~/assets";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { AddUser, PlusIcon, PostIcon, SavedIcon, UserTagIcon } from "~/assets";
+import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import Article from "./Components/Article";
 import Footer from "~/components/Footer/Footer";
 import Saved from "./Components/Saved";
 import UserTag from "./Components/UserTag";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { User } from "~/store/User/User";
 
-interface User {
-    _id: string;
-    username: string;
-    avatar: string;
-    // Bạn có thể thêm các trường khác nếu cần
-}
 
 const Profile = () => {
-    const [user, setUser] = useState<User | null>(null);  // Chỉ lưu 1 người dùng
+    const { userId: paramUserId } = useParams(); // Lấy userId từ URL params
+    const [user, setUser] = useState<User | null>(null);
+    const [followers, setFollowers] = useState<any[]>([]); // Lưu trữ danh sách người theo dõi
+    const [following, setFollowing] = useState<any[]>([]); // Lưu trữ danh sách người đang theo dõi
+
     const location = useLocation();
     const currentPath = location.pathname;
 
     useEffect(() => {
-        const userId = localStorage.getItem('userID');  // Get userId from localStorage
+        // Xác định userId (user đang xem profile, nếu là người dùng đã đăng nhập thì lấy từ localStorage)
+        const userId = paramUserId || localStorage.getItem('userID'); // Lấy userId từ URL hoặc localStorage
         const token = localStorage.getItem('authToken');
-        if (userId) {
+
+        if (userId && token) {
+            // Fetch thông tin người dùng
             const fetchUser = async () => {
                 try {
                     const response = await fetch(`https://dacnbe.onrender.com/user/getUserById?userId=${userId}`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
-                            "Accept": "*/*",
-                            "Accept-Encoding": "gzip, deflate, br",
-                            "Connection": "keep-alive",
-                            "token": `Bearer ${token}`
+                            "token": `Bearer ${token}`,
                         },
                     });
-                    const data = await response.json();  // Parse the response body as JSON
-                    setUser(data);  // Update the user state with the fetched data
-                    console.log("Fetch successful", data);
+                    const data = await response.json();
+                    setUser(data);
                 } catch (error) {
                     console.error("Error fetching user:", error);
                 }
             };
 
-            fetchUser();
-        }
-    }, []);  // Run only once when the component mounts
+            // Fetch danh sách người theo dõi
+            const fetchFollowing = async () => {
+                try {
+                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollowing?userId=${userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setFollowing(data);
+                } catch (error) {
+                    console.error("Error fetching following:", error);
+                }
+            };
 
+            // Fetch danh sách người đang theo dõi
+            const fetchFollower = async () => {
+                try {
+                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollower?userId=${userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setFollowers(data);
+                } catch (error) {
+                    console.error("Error fetching followers:", error);
+                }
+            };
+
+            fetchUser();
+            fetchFollowing();
+            fetchFollower();
+        }
+    }, [paramUserId]); // Chạy lại khi userId trong URL thay đổi
 
     return (
         <LayoutMain>
@@ -69,26 +101,37 @@ const Profile = () => {
                                 <div className="h-auto flex flex-col gap-3">
                                     <div className="w-full h-10 flex items-center lg:gap-5 gap-2">
                                         <span className="lg:text-xl">{user?.username || 'Tên người dùng'}</span>
-                                        <Button title="Chỉnh sửa trang cá nhân" link="" />
-                                        <Button title="Xem kho lưu trữ" link="" />
+                                        {paramUserId ? (
+                                            <div className="w-auto h-auto flex items-center gap-4">
+                                                <button className="xl:h-8 h-auto px-4 text-sm bg-ig-primary-button rounded-md">Theo dõi</button>
+                                                <button className="xl:h-8 h-auto px-4 text-sm bg-ig-bg-button rounded-md"><AddUser /></button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex gap-4">
+                                                <Button title="Xem kho lưu trữ" link="" />
+                                                <Button title="Chỉnh sửa trang cá nhân" link="" />
+                                            </div>
+
+                                        )}
                                         <div className="cursor-pointer">
                                             <SetingDropIcon className="w-6 h-6" />
                                         </div>
                                     </div>
                                     <div className="h-10 w-full flex gap-10 items-center">
                                         <div className="flex gap-1 lg:text-base text-sm">
-                                            <span>1000 bài viết</span>
+                                            <span>0 bài viết</span>
                                         </div>
                                         <div className="flex gap-1 lg:text-base text-sm cursor-pointer">
-                                            <span>10000 người theo dõi</span>
+                                            <span>{followers.length} người theo dõi</span> {/* Hiển thị số người theo dõi */}
                                         </div>
                                         <div className="flex gap-1 lg:text-base text-sm cursor-pointer">
-                                            <span>Đang theo dõi 3800000 người dùng</span>
+                                            <span>{following.length} Đang theo dõi</span> {/* Hiển thị số người đang theo dõi */}
                                         </div>
                                     </div>
+
                                     <div className="h-auto flex flex-col items-start">
                                         <span className="lg:text-base md:text-sm font-semibold">
-                                            {user?.username || 'Tên đầy đủ'}
+                                            {user?.fullname || 'Tên đầy đủ'}
                                         </span>
                                     </div>
                                 </div>
@@ -140,17 +183,17 @@ const Profile = () => {
                                 </div>
                                 <div className="">
                                     <Routes>
-                                        <Route path="/" element={<Article />} />
-                                        <Route path="/saved" element={<Saved />} />
-                                        <Route path="/tagged" element={<UserTag />} />
+                                        <Route path="*" element={<Article userId={paramUserId}/>} />
+                                        <Route path="saved" element={<Saved />} />
+                                        <Route path="tagged" element={<UserTag />} />
                                     </Routes>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </main>
+                <Footer />
             </section>
-            <Footer />
         </LayoutMain>
     );
 };

@@ -8,12 +8,15 @@ import Register from "./view/Register/Register";
 import Login from "./view/Login/Login";
 
 function App() {
+  const loggedInUserId = localStorage.getItem("userID");
+
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} /> 
+        <Route path="/" element={<Home />} />
         <Route path="/discovery" element={<Discovery />} />
-        <Route path="/profile/*" element={<Profile />} /> 
+        <Route path="/profile" element={<Profile />} /> {/* Trang cá nhân của người dùng đã đăng nhập */}
+        <Route path="/profile/:userId" element={<Profile />} /> {/* Trang cá nhân của người khác */}
         <Route path="/setting/*" element={<Setting />} />
         <Route path="/messenger" element={<Messenger />} />
         <Route path="/register" element={<Register />} />

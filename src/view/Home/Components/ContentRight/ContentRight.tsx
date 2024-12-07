@@ -1,33 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ContentRight.scss';
-import { IUser } from '~/store/User/User';
+import { User } from '~/store/User/User';
 import NgocDiep from '~/assets/7.jpg'
 import OnclickText from '~/components/OnclickText/OnclickText';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import useFollowUser from '~/Hook/useFollowUser';
+import { useNavigate } from 'react-router-dom';
 
-const ItemUserRight: React.FC<IUser> = ({ UserID, UserAvatar }) => {
+
+const ItemUserRight: React.FC<User> = ({ _id, username, avatar, fullname }) => {
+    const userId = localStorage.getItem('userID');
+    const navigate = useNavigate(); // Hook điều hướng
+    const { isFollowing, followUser, loading, error } = useFollowUser();
+
+    // Hàm xử lý khi nhấn vào item
+    const handleNavigateToProfile = () => {
+        navigate(`/profile/${_id}`);
+    };
+
     return (
-        <div className="w-full px-4 py-2">
+        <div
+            className="w-full px-4 py-2 hover:bg-white/40"
+            key={_id}
+            onClick={handleNavigateToProfile} // Gọi hàm điều hướng khi click vào
+        >
             <div className="w-full h-11 flex justify-between items-center cursor-pointer">
                 <div className="w-full flex gap-3">
                     <div className="w-11 h-11 flex-shrink-0">
-                        <img src={UserAvatar} className="w-full h-full object-cover rounded-full" />
+                        <img src={avatar} className="w-full h-full object-cover rounded-full" alt={username} />
                     </div>
                     <div className="w-full h-auto flex flex-col justify-center">
-                        <span className="text-sm text-ig-primary-text font-bold">{UserID}</span>
-                        <span className='text-xs text-ig-secondary-text text-nowrap'>Đang theo dõi ngocmeomeo</span>
+                        <span className="text-sm text-ig-primary-text font-bold">{username}</span>
+                        <span className="text-xs text-ig-secondary-text">{fullname}</span>
                     </div>
                 </div>
-                <div>
-                    <OnclickText initialLabel="Theo dõi" activeLabel="Đang theo dõi" />
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation(); // Ngăn chặn sự kiện click tràn sang parent
+                        followUser(userId, _id); // Gọi hàm follow
+                    }}
+                >
+                    <OnclickText
+                        initialLabel={isFollowing ? "Đang theo dõi" : "Theo dõi"}
+                        activeLabel={isFollowing ? "Đang theo dõi" : "Theo dõi"}
+                        onClick={() => followUser(userId, _id)}
+                    />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
+
 
 
 const ContentRight = () => {
+
+    const [users, setUsers] = useState<User[]>([]);
+
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const userResponse = await axios.get("https://dacnbe.onrender.com/user/getAllUsers");
+                setUsers(userResponse.data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+
     return (
         <div className="w-[383px] pl-16 custom-contentright">
             <div className="w-[315px] flex flex-col gap-6">
@@ -51,13 +97,17 @@ const ContentRight = () => {
                         <span className="text-xs hover:text-ig-secondary-text cursor-pointer">Xem tất cả</span>
                     </div>
                     <div className="">
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
-                        <ItemUserRight UserID="ngocmeomeo" UserAvatar={NgocDiep} />
+                        {users.map(user => (
+                            <ItemUserRight
+                                key={user._id}
+                                _id={user._id}
+                                username={user.username}
+                                fullname={user.fullname}
+                                avatar={user.avatar || NgocDiep}
+                            />
+                        ))}
                     </div>
+
                 </div>
                 <div className="w-full px-4 flex flex-col gap-6">
                     <div className="flex flex-wrap">

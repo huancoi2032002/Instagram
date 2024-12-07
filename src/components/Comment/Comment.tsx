@@ -41,8 +41,6 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState<Comment[]>([]);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(likeNum);  // Initialize with the current number of likes
     const [saveds, setSaveds] = useState(false);
     const [formattedDate, setFormattedDate] = useState<string>("");
     const [users, setUsers] = useState<User[]>([]);
@@ -60,7 +58,8 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
         const token = localStorage.getItem('authToken');
         const fetchComments = async () => {
             try {
-                const postResponse = await axios.get(`https://dacnbe.onrender.com/postComment/getAllComments`, {
+                const postResponse = await axios.get(`https://dacnbe.onrender.com/postComment/getComment?postId=${postId}&skip=0`, {
+                    method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "*/*",
@@ -88,40 +87,12 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
     }, [postId]);  // Add postId as dependency
 
 
-    const handleLike = async () => {
-        const userId = localStorage.getItem('userID');
-        const token = localStorage.getItem('authToken');
-        if (!userId) {
-            console.error('User is not logged in');
-            window.location.href = "/login";
-            return;
-        }
-
-
-        try {
-            const response = await fetch(`https://dacnbe.onrender.com/post/likePost?postId=${postId}&userId=${userId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                setLiked((prev) => !prev); // Toggle like state
-            } else {
-                console.error('Failed to like the post');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+    
 
     const handleCreateComment = async () => {
         const token = localStorage.getItem('authToken');
         const user = localStorage.getItem('userID');
         const post = postId
-        const parent = localStorage.getItem('userID');
 
         if (!postId) {
             console.error("Post ID is missing");
@@ -150,7 +121,7 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                     post,      // ID của bài viết
                     user,      // ID của người dùng
                     content: comment,  // Nội dung bình luận
-                    parent,      // ID của bình luận gốc nếu có (nếu có chế độ trả lời)
+                    parent: "",      // ID của bình luận gốc nếu có (nếu có chế độ trả lời)
                     replyTo: "", // Nếu có trả lời một bình luận, điền ID của bình luận đó
                 }),
             });
@@ -166,11 +137,6 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
         } catch (error) {
             console.error("Error:", error);
         }
-    };
-
-
-    const handleSaved = () => {
-        setSaveds(prev => !prev);
     };
 
     const handleNext = () => {
@@ -291,14 +257,14 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                                                 <span>{new Date(comment.createdAt).toLocaleString()}</span>
                                                 <span>300 lượt thích</span>
                                                 <span>Trả lời</span>
+                                                <span><OtherOptionsIcon/></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="cursor-pointer text-xl hover:text-white/60 flex items-center">
-                                        {!liked ?
-                                            <LoveIcon className="w-3 h-3" /> :
-                                            <FavouriteIcon className="fill-red-600 w-3 h-3" />
-                                        }
+                                        
+                                            <LoveIcon className="w-3 h-3" />
+                                             
                                     </div>
                                 </div>
                             );
@@ -310,27 +276,6 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                     </div>
                     <div className="w-full h-auto">
                         <div className="w-full py-[6px] px-4 border-b border-white/20">
-                            <div className="flex items-center justify-between w-full mb-2 mt-4">
-                                <div className="flex items-center gap-4">
-                                    <div onClick={handleLike} className="cursor-pointer text-xl hover:text-white/60">
-                                        {!liked ? <LoveIcon /> : <FavouriteIcon className="fill-red-600" />}
-                                    </div>
-                                    <div className="cursor-pointer text-xl hover:text-white/60">
-                                        <CommentIcon className="" />
-                                    </div>
-                                    <div className="cursor-pointer text-xl hover:text-white/60">
-                                        <ShareIcon />
-                                    </div>
-                                </div>
-                                <div className="flex items-center cursor-pointer hover:text-white/60" onClick={handleSaved}>
-                                    {saveds ? (
-                                        <SavedIcon className="w-6 h-6 fill-white" />
-                                    ) : (
-                                        <SavedIcon className="w-6 h-6 fill-black" />
-                                    )}
-                                </div>
-                            </div>
-                            <p className="text-sm font-semibold">{likes} likes</p>
                             <span className="text-gray-600 font-medium text-xs">{formattedDate}</span>
                         </div>
                         <div className="w-full py-[6px] pr-4 ">

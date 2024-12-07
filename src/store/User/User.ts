@@ -1,6 +1,6 @@
-
-interface User {
-    _id: string;
-    username: string;
-    avatar: string;
-  }
+export interface User {
+  _id: string;
+  username: string;
+  avatar: string;
+  fullname: string;
+}
