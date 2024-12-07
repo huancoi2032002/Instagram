@@ -25,6 +25,7 @@ interface Comment {
     replyTo: string | null;
     createdAt: string;
     updatedAt: string;
+
 }
 
 interface User {
@@ -44,6 +45,7 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
     const [saveds, setSaveds] = useState(false);
     const [formattedDate, setFormattedDate] = useState<string>("");
     const [users, setUsers] = useState<User[]>([]);
+
 
     const handleShowNotificationPost = () => {
         setIsShowNotificationPost(prev => !prev)
@@ -87,7 +89,7 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
     }, [postId]);  // Add postId as dependency
 
 
-    
+
 
     const handleCreateComment = async () => {
         const token = localStorage.getItem('authToken');
@@ -176,8 +178,10 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
         return users.find(user => user._id === userId);
     };
 
+
+
     return (
-        <div className="w-full h-screen fixed top-0 left-0 bg-black/50 z-[100]">
+        <div className="w-full h-screen fixed top-0 left-0 bg-black/50 z-[9999]">
             <div className="w-full h-full flex lg:py-20 2xl:py-10 px-4 sm:px-10 md:px-20 lg:px-40 2xl:px-72">
                 <div className="w-[60%] h-full relative">
                     {images.length > 0 && (
@@ -231,9 +235,13 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                         </div>
                     </div>
                     <div className="flex-1 overflow-y-auto max-h-[700px]">
+
                         {comments.map(comment => {
-                            // Get the user by their ID
-                            const author = getUserById(comment.user);
+
+                            const author = getUserById(comment.user);  
+                            console.log("Author:", author); 
+
+
 
                             return (
                                 <div className="h-auto w-full flex pl-4 pr-4 py-[14px] gap-2" key={comment._id}>
@@ -257,14 +265,14 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                                                 <span>{new Date(comment.createdAt).toLocaleString()}</span>
                                                 <span>300 lượt thích</span>
                                                 <span>Trả lời</span>
-                                                <span><OtherOptionsIcon/></span>
+                                                <span><OtherOptionsIcon /></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="cursor-pointer text-xl hover:text-white/60 flex items-center">
-                                        
-                                            <LoveIcon className="w-3 h-3" />
-                                             
+
+                                        <LoveIcon className="w-3 h-3" />
+
                                     </div>
                                 </div>
                             );

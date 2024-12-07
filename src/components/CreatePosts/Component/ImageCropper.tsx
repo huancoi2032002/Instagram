@@ -11,6 +11,8 @@ type ImageCropperProps = {
     setStep: (step: number) => void;
 };
 
+
+
 const ImageCropper: React.FC<ImageCropperProps> = ({ step, setStep }) => {
     const [selectedFiles, setSelectedFiles] = useSessionStorage<string[]>("selectedFiles", []);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,6 +44,9 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ step, setStep }) => {
             setCurrentIndex(selectedFiles.length - 1);
         }
     }, [selectedFiles]);
+
+   
+    
 
     const handleNext = () => {
         if (currentIndex < selectedFiles.length - 1) {
@@ -108,13 +113,15 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ step, setStep }) => {
 
     return (
         <div className="bg-ig-elevated-background rounded-xl overflow-hidden">
-            <LabelPost
-                title={step === 3 ? "Tạo bài viết mới" : "Chỉnh sửa"}
+            {step === 2 && (
+                <LabelPost
+                title={"Chỉnh sửa"}
                 showBackNext={true}
                 onPrev={handlePrevStep}
                 onNext={handleNextStep}
                 step={step}
             />
+            )}
             <div className="w-full flex">
                 <div className="relative custom-create-post-second xl:w-[711px] xl:h-[711px] md:w-[487px] md:h-[487px]">
                     <div className="w-full h-full">
@@ -183,12 +190,6 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ step, setStep }) => {
                         </div>
                     )}
                 </div>
-
-                {step === 3 && (
-                    <div className="flex-grow ml-4">
-                        <CreateNewPost />
-                    </div>
-                )}
             </div>
             {showNotification && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50">
