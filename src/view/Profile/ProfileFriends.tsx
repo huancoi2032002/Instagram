@@ -4,7 +4,7 @@ import './Profile.scss';
 import Button from "~/components/Button/Button";
 import { SetingDropIcon } from "~/assets/SettingIcon";
 import { AddUser, PlusIcon, PostIcon, SavedIcon, UserTagIcon } from "~/assets";
-import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useParams, useNavigate } from "react-router-dom";
 import Article from "./Components/Article";
 import Footer from "~/components/Footer/Footer";
 import Saved from "./Components/Saved";
@@ -12,61 +12,8 @@ import UserTag from "./Components/UserTag";
 import { useEffect, useState } from "react";
 import { User } from "~/store/User/User";
 
-const API_BASE_URL = "https://dacnbe.onrender.com";
 
-// Hàm lấy thông tin người dùng
-export const fetchUser = async (userId: string, token: string): Promise<any> => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/user/getUserById?userId=${userId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "token": `Bearer ${token}`,
-            },
-        });
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching user:", error);
-        throw error;
-    }
-};
-
-// Hàm lấy danh sách người đang theo dõi
-export const fetchFollowing = async (userId: string, token: string): Promise<any> => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/relationship/getFollowing?userId=${userId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "token": `Bearer ${token}`,
-            },
-        });
-        const data = await response.json();
-        return data as User[];
-    } catch (error) {
-        console.error("Error fetching following:", error);
-        throw error;
-    }
-};
-
-// Hàm lấy danh sách người theo dõi
-export const fetchFollower = async (userId: string, token: string): Promise<any> => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/relationship/getFollower?userId=${userId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "token": `Bearer ${token}`,
-            },
-        });
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching followers:", error);
-        throw error;
-    }
-};
-
-const Profile = () => {
+const ProfileFriends = () => {
     const { userId: paramUserId } = useParams(); // Lấy userId từ URL params
     const [user, setUser] = useState<User | null>(null);
     const [followers, setFollowers] = useState<any[]>([]); // Lưu trữ danh sách người theo dõi
@@ -74,30 +21,129 @@ const Profile = () => {
 
     const location = useLocation();
     const currentPath = location.pathname;
+    const navigate = useNavigate()
+
+    const createConversation = async () => {
+        // Trích xuất userId từ URL
+        const url = window.location.href; // Lấy URL hiện tại
+        const userId = url.split("/").pop(); // Lấy phần cuối của URL là userId
+        if (!userId) {
+            alert("Không thể lấy userId từ URL.");
+            return;
+        }
+
+        // Lấy userId của bạn từ localStorage
+        const myId = localStorage.getItem("userID");
+        if (!myId) {
+            alert("Không thể lấy userId của bạn từ localStorage.");
+            return;
+        }
+
+        // Tạo payload
+        const payload = {
+            type: "personal",
+            participants: [myId, userId],
+        };
+
+        // Gửi yêu cầu POST tới API
+        try {
+            const response = await fetch("https://dacnbe.onrender.com/conversation/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "*/*",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Connection": "keep-alive",
+                    "token": `Bearer ${localStorage.getItem("authToken")}`, // Nếu cần token để xác thực
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const conversationId = data?._id; // Lấy conversationId từ phản hồi API
+                if (conversationId) {
+                    alert("Cuộc hội thoại được tạo thành công!");
+                    navigate(`/messenger/${conversationId}`); // Điều hướng tới Messenger với conversationId
+                } else {
+                    alert("Không thể tạo cuộc hội thoại. Không tìm thấy conversationId.");
+                }
+            } else {
+                const error = await response.json();
+                console.error("Lỗi khi tạo cuộc hội thoại:", error);
+                alert(`Lỗi: ${error.message || "Không thể tạo cuộc hội thoại."}`);
+            }
+        } catch (error) {
+            console.error("Lỗi kết nối:", error);
+            alert("Lỗi kết nối. Vui lòng thử lại.");
+        }
+    };
 
     useEffect(() => {
-        // Xác định userId (user đang xem profile, nếu là người dùng đã đăng nhập thì lấy từ localStorage)
-        const userId = paramUserId || localStorage.getItem('userID'); // Lấy userId từ URL hoặc localStorage
+        // Xác định userId (ưu tiên lấy từ URL, nếu không có thì lấy từ localStorage)
+        const userId = paramUserId;
+        console.log("userId la", userId);
+        
+        
         const token = localStorage.getItem('authToken');
-
+    
         if (userId && token) {
             // Fetch thông tin người dùng
-            const loadUserData = async () => {
+            const fetchUser = async () => {
                 try {
-                    const userData = await fetchUser(userId, token);
-                    const followingData = await fetchFollowing(userId, token);
-                    const followerData = await fetchFollower(userId, token);
-
-                    setUser(userData);
-                    setFollowing(followingData);
-                    setFollowers(followerData);
+                    const response = await fetch(`https://dacnbe.onrender.com/user/getUserById?userId=${userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setUser(data);
                 } catch (error) {
-                    console.error("Error loading user data:", error);
+                    console.error("Error fetching user:", error);
                 }
             };
-            loadUserData();
+    
+            // Fetch danh sách người theo dõi
+            const fetchFollowing = async () => {
+                try {
+                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollowing?userId=${userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setFollowing(data);
+                } catch (error) {
+                    console.error("Error fetching following:", error);
+                }
+            };
+    
+            // Fetch danh sách người đang theo dõi
+            const fetchFollower = async () => {
+                try {
+                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollower?userId=${userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setFollowers(data);
+                } catch (error) {
+                    console.error("Error fetching followers:", error);
+                }
+            };
+    
+            fetchUser();
+            fetchFollowing();
+            fetchFollower();
         }
-    }, [paramUserId]); // Chạy lại khi userId trong URL thay đổi
+    }, [paramUserId]);// Chạy lại khi userId trong URL thay đổi
 
     return (
         <LayoutMain>
@@ -118,6 +164,7 @@ const Profile = () => {
                                         {paramUserId ? (
                                             <div className="w-auto h-auto flex items-center gap-4">
                                                 <button className="xl:h-8 h-auto px-4 text-sm bg-ig-primary-button rounded-md">Theo dõi</button>
+                                                <button className="xl:h-8 h-auto px-4 text-sm bg-ig-primary-button rounded-md" onClick={createConversation}>Nhắn tin</button>
                                                 <button className="xl:h-8 h-auto px-4 text-sm bg-ig-bg-button rounded-md"><AddUser /></button>
                                             </div>
                                         ) : (
@@ -212,4 +259,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default ProfileFriends;

@@ -4,6 +4,7 @@ import './CreatePost.scss';
 import ImageCropper from "./Component/ImageCropper";
 import InputFilePost from "./Component/InputFilePost";
 import NotificationPost from "./Component/NotificationPost";
+import CreateNewPost from "./Component/CreateNewPost";
 
 
 type CreatePostProps = {
@@ -66,11 +67,12 @@ const CreatePost: React.FC<CreatePostProps> = ({ onClose }) => {
                 <div className="custom-create-post my-5" ref={createPostRef}>
                     <div className="custom-create-post-primary">
                         {step === 1 && <InputFilePost onFilesSelected={handleFilesSelected} />}
-                        {step >= 2 && (
+                        {step === 2 && (
                             <>
                                 <ImageCropper step={step} setStep={setStep} />
                             </>
                         )}
+                        {step === 3 && <CreateNewPost step={step} setStep={setStep} onClose={() => setShowNotification(true)}/>}
                     </div>
                 </div>
             </div>

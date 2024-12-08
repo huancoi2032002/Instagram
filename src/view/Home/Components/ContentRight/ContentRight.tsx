@@ -91,6 +91,12 @@ const ContentRight = () => {
         fetchUsers();
     }, []);
 
+    const loggedInUserId = localStorage.getItem("userID");
+    console.log(loggedInUserId);
+
+
+    // Lọc người dùng để lấy thông tin dựa trên ID
+    const loggedInUser = users.find((user) => user._id === loggedInUserId);
 
     return (
         <div className="w-[383px] pl-16 custom-contentright">
@@ -101,8 +107,8 @@ const ContentRight = () => {
                             <img src={NgocDiep} className="w-full h-full object-cover rounded-full" />
                         </div>
                         <div className="w-full h-full flex flex-col justify-center">
-                            <span className="text-sm text-ig-primary-text font-bold">nauh_nguyn</span>
-                            <span className='text-sm text-ig-secondary-text'>Nguyễn Hữu Huân</span>
+                            <span className="text-sm text-ig-primary-text font-bold">{loggedInUser?.username}</span>
+                            <span className='text-sm text-ig-secondary-text'>{loggedInUser?.fullname}</span>
                         </div>
                     </div>
                     <div>
@@ -115,15 +121,17 @@ const ContentRight = () => {
                         <span className="text-xs hover:text-ig-secondary-text cursor-pointer">Xem tất cả</span>
                     </div>
                     <div className="">
-                        {users.map(user => (
-                            <ItemUserRight
-                                key={user._id}
-                                _id={user._id}
-                                username={user.username}
-                                fullname={user.fullname}
-                                avatar={user.avatar || NgocDiep}
-                            />
-                        ))}
+                        {users
+                            .filter(user => user._id !== loggedInUserId) // Loại bỏ người dùng trùng ID đăng nhập
+                            .map(user => (
+                                <ItemUserRight
+                                    key={user._id}
+                                    _id={user._id}
+                                    username={user.username}
+                                    fullname={user.fullname}
+                                    avatar={user.avatar || NgocDiep}
+                                />
+                            ))}
                     </div>
 
                 </div>

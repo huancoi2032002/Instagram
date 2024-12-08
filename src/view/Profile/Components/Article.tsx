@@ -25,10 +25,14 @@ type ItemPostProps = {
     className?: string;
     likeNum: number;
     commentNum: number;
-    postId: string;
+    images: string[];
+    avatar: string;
+    postId: string; // add postId to make API call
+    createdAt: string
+    username: string
 }
 
-const ItemPost: React.FC<ItemPostProps> = ({ img, className, likeNum, commentNum, postId }) => {
+const ItemPost: React.FC<ItemPostProps> = ({ img, className, likeNum, commentNum, postId, images, avatar, createdAt, username }) => {
     const [isOpenComment, setOpenComment] = useState(false);
 
     const handleGetComment = async () => {
@@ -56,6 +60,10 @@ const ItemPost: React.FC<ItemPostProps> = ({ img, className, likeNum, commentNum
         }
     };
 
+    const handleCloseComment = () => {
+        setOpenComment(prev => !prev);
+    };
+
     return (
         <div className={`image-container group cursor-pointer ${className}`} onClick={handleGetComment}>
             <img src={img} className="w-full h-full object-cover" />
@@ -69,6 +77,9 @@ const ItemPost: React.FC<ItemPostProps> = ({ img, className, likeNum, commentNum
                     <span className="font-bold">{commentNum}</span>
                 </div>
             </div>
+            {isOpenComment && (
+                <Comment onClose={handleCloseComment} username={username} images={images} avatar={avatar} postId={postId} likeNum={likeNum} createdAt={createdAt} />
+            )}
         </div>
     );
 };
@@ -76,24 +87,29 @@ interface ArticleProps {
     userId: string | undefined;
 }
 
-const Article:React.FC<ArticleProps> = ({ userId }) => {
+const Article: React.FC<ArticleProps> = ({ userId }) => {
     const [isOpenCreatePost, setIsOpenCreatePost] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
     const [users, setUsers] = useState<User[]>([]);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(userId || localStorage.getItem('userID'));
 
     useEffect(() => {
+        if (!currentUserId) {
+            console.error("User ID is missing");
+            return;
+        }
+
         const token = localStorage.getItem('authToken');
 
         const fetchPosts = async () => {
             try {
-                const postResponse = await axios.get(`https://dacnbe.onrender.com/post/getPostsOfOneUser?userId=${userId}`, {
+                const postResponse = await axios.get(`https://dacnbe.onrender.com/post/getPostsOfOneUser?userId=${currentUserId}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "*/*",
                         "token": `Bearer ${token}`,
                     }
                 });
-
                 setPosts(postResponse.data);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -112,7 +128,8 @@ const Article:React.FC<ArticleProps> = ({ userId }) => {
 
         fetchPosts();
         fetchUsers();
-    }, [userId]);
+
+    }, [currentUserId]);
 
     const handleOpenCreatePost = () => {
         setIsOpenCreatePost(true);
@@ -123,12 +140,27 @@ const Article:React.FC<ArticleProps> = ({ userId }) => {
     };
 
     const getUserAvatar = (authorId: string) => {
+        if (!authorId) {
+            console.error("Invalid authorId:", authorId);
+            return "";
+        }
+
         const user = users.find((user) => user._id === authorId);
-        return user ? user.avatar : ""; // Return the avatar if found
+        return user ? user.avatar : "";
+    };
+
+    const getUsername = (authorId: string) => {
+        if (!authorId) {
+            console.error("Invalid authorId:", authorId);
+            return "Unknown";
+        }
+
+        const user = users.find((user) => user._id === authorId);
+        return user ? user.username : "Unknown";
     };
 
     return (
-        <div className="">
+        <div className="z-[100]">
             {posts.length === 0 && (
                 <div className="w-full flex justify-center">
                     <div className="w-[350px] flex flex-col items-center my-[60px] xl:mx-[44px] gap-4">
@@ -147,19 +179,25 @@ const Article:React.FC<ArticleProps> = ({ userId }) => {
             <div className="w-full z-10">
                 <div className="grid grid-cols-3 gap-1">
                     {posts.map((post) => (
-                        <ItemPost
-                            key={post._id}
-                            img={post.medias[0].source}
-                            className="custom-class-for-post"
-                            likeNum={post.likeNum}
-                            commentNum={post.commentNum}
-                            postId={post._id}
-                        />
+                        <div key={post._id}>
+                            <ItemPost
+                                img={post.medias[0]?.source || ""}
+                                className="custom-class-for-post"
+                                likeNum={post.likeNum}
+                                commentNum={post.commentNum}
+                                postId={post._id}
+                                images={post.medias.map((media) => media.source)}
+                                username={getUsername(post.author)}
+                                avatar={getUserAvatar(post.author)}
+                                createdAt={post.createdAt}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
         </div>
     );
 };
+
 
 export default Article;

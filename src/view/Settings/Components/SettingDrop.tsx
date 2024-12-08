@@ -37,12 +37,18 @@ const dataItemSetting = [
 const SettingDrop = () => {
 
     const [openSwitchAccount, setOpenSwitchAccount] = useState(false);
-    
+
     const handleOpen = () => {
         setOpenSwitchAccount(prev => !prev)
     }
     const handleClose = () => {
         setOpenSwitchAccount(false)
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userID');
+        window.location.href = "/login";
     }
 
     return (
@@ -55,7 +61,7 @@ const SettingDrop = () => {
                             icon={item.icon}
                             title={item.title}
                             path={item.path}
-                            onClick={item.onClick} 
+                            onClick={item.onClick}
                         />
                     ))}
                 </div>
@@ -72,7 +78,7 @@ const SettingDrop = () => {
             <div className="p-2">
                 <div
                     className="w-[250px] flex items-center gap-3 p-4 hover:bg-gray-400/20 rounded-lg cursor-pointer text-sm"
-                    onClick={() => console.log('Đăng xuất')}
+                    onClick={handleLogout}
                 >
                     <div>Đăng xuất</div>
                 </div>
