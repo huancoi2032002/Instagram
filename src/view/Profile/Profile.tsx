@@ -12,6 +12,59 @@ import UserTag from "./Components/UserTag";
 import { useEffect, useState } from "react";
 import { User } from "~/store/User/User";
 
+const API_BASE_URL = "https://dacnbe.onrender.com";
+
+// Hàm lấy thông tin người dùng
+export const fetchUser = async (userId: string, token: string): Promise<any> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/getUserById?userId=${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": `Bearer ${token}`,
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error;
+    }
+};
+
+// Hàm lấy danh sách người đang theo dõi
+export const fetchFollowing = async (userId: string, token: string): Promise<any> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/relationship/getFollowing?userId=${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        return data as User[];
+    } catch (error) {
+        console.error("Error fetching following:", error);
+        throw error;
+    }
+};
+
+// Hàm lấy danh sách người theo dõi
+export const fetchFollower = async (userId: string, token: string): Promise<any> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/relationship/getFollower?userId=${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": `Bearer ${token}`,
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching followers:", error);
+        throw error;
+    }
+};
 
 const Profile = () => {
     const { userId: paramUserId } = useParams(); // Lấy userId từ URL params
@@ -29,59 +82,21 @@ const Profile = () => {
 
         if (userId && token) {
             // Fetch thông tin người dùng
-            const fetchUser = async () => {
+            const loadUserData = async () => {
                 try {
-                    const response = await fetch(`https://dacnbe.onrender.com/user/getUserById?userId=${userId}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "token": `Bearer ${token}`,
-                        },
-                    });
-                    const data = await response.json();
-                    setUser(data);
+                    const userData = await fetchUser(userId, token);
+                    const followingData = await fetchFollowing(userId, token);
+                    const followerData = await fetchFollower(userId, token);
+
+                    setUser(userData);
+                    setFollowing(followingData);
+                    setFollowers(followerData);
                 } catch (error) {
-                    console.error("Error fetching user:", error);
+                    console.error("Error loading user data:", error);
                 }
             };
 
-            // Fetch danh sách người theo dõi
-            const fetchFollowing = async () => {
-                try {
-                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollowing?userId=${userId}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "token": `Bearer ${token}`,
-                        },
-                    });
-                    const data = await response.json();
-                    setFollowing(data);
-                } catch (error) {
-                    console.error("Error fetching following:", error);
-                }
-            };
-
-            // Fetch danh sách người đang theo dõi
-            const fetchFollower = async () => {
-                try {
-                    const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollower?userId=${userId}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "token": `Bearer ${token}`,
-                        },
-                    });
-                    const data = await response.json();
-                    setFollowers(data);
-                } catch (error) {
-                    console.error("Error fetching followers:", error);
-                }
-            };
-
-            fetchUser();
-            fetchFollowing();
-            fetchFollower();
+            loadUserData();
         }
     }, [paramUserId]); // Chạy lại khi userId trong URL thay đổi
 

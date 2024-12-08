@@ -14,7 +14,6 @@ const useFollowUser = () => {
                 const response = await fetch(`https://dacnbe.onrender.com/relationship/getRelationShipTowardOneUser?user1=${userId}&user2=${targetUserId}`, {
                     method: "GET",
                     headers: {
-                        
                         "Accept": "*/*",
                         "Accept-Encoding": "gzip, deflate, br",
                         "Connection": "keep-alive",
@@ -46,14 +45,16 @@ const useFollowUser = () => {
     const followUser = async (userId: string | null, targetUserId: string) => {
         if (userId !== targetUserId) {
             try {
-                const response = await fetch("https://dacnbe.onrender.com/relationship/create", {
+
+                const url = isFollowing
+                    ? "https://dacnbe.onrender.com/relationship/delete"
+                    : "https://dacnbe.onrender.com/relationship/create";
+                const response = await fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "*/*",
-                        "Accept-Encoding": "gzip, deflate, br",
-                        "Connection": "keep-alive",
-                        "token": `Bearer ${token}`, // Đảm bảo sử dụng "Authorization"
+                        "token": `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                         user1: userId,
@@ -65,10 +66,10 @@ const useFollowUser = () => {
                 if (response.status === 200) {
                     setIsFollowing(prevState => !prevState); // Toggle trạng thái theo dõi
                 } else {
-                    console.error("Failed to follow the user");
+                    console.error(isFollowing ? "Failed to unfollow the user" : "Failed to follow the user");
                 }
             } catch (error) {
-                console.error("Error following user:", error);
+                console.error("Error following/unfollowing user:", error);
             }
         }
     };

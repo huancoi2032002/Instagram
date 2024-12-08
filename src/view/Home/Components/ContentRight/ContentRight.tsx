@@ -6,6 +6,7 @@ import OnclickText from '~/components/OnclickText/OnclickText';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useFollowUser from '~/Hook/useFollowUser';
+import { fetchFollowing } from '~/view/Profile/Profile';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -44,7 +45,7 @@ const ItemUserRight: React.FC<User> = ({ _id, username, avatar, fullname }) => {
                     <OnclickText
                         initialLabel={isFollowing ? "Đang theo dõi" : "Theo dõi"}
                         activeLabel={isFollowing ? "Đang theo dõi" : "Theo dõi"}
-                        onClick={() => followUser(userId, _id)}
+                        onClick={() => { }}
                     />
                 </div>
             </div>
@@ -58,13 +59,30 @@ const ItemUserRight: React.FC<User> = ({ _id, username, avatar, fullname }) => {
 const ContentRight = () => {
 
     const [users, setUsers] = useState<User[]>([]);
-
+    const [following, setFollowing] = useState<User[]>([]);
 
     useEffect(() => {
+
         const fetchUsers = async () => {
+
             try {
+                const userId = localStorage.getItem("userID"); // Lấy userId từ localStorage
+                const token = localStorage.getItem("authToken");
+                if (!userId || !token) {
+                    console.error("User ID or token not found");
+                    return;
+                }
+                // Lấy danh sách following
+                const followingData = await fetchFollowing(userId, token);
+                setFollowing(followingData);
+
                 const userResponse = await axios.get("https://dacnbe.onrender.com/user/getAllUsers");
-                setUsers(userResponse.data);
+                const allUsers = userResponse.data;
+
+                const filteredUsers = allUsers.filter(
+                    (user: User) => !followingData.some((f: User) => f._id === user._id)
+                );
+                setUsers(filteredUsers);
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
