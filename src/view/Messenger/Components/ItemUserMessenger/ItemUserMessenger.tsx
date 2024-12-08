@@ -107,10 +107,12 @@ function ItemUserMessenger({
                         </span>
                         <div className="w-full flex flex-row justify-between items-center">
                             <div className="flex flex-row justify-start items-center">
-                                <img
-                                    src={conversationInfo.senderAvatar}
-                                    className="w-4 h-4 rounded-full"
-                                />
+                                {senderAvatar && (
+                                    <img
+                                        src={conversationInfo.senderAvatar}
+                                        className="w-4 h-4 rounded-full"
+                                    />
+                                )}
                                 <span className="text-ig-secondary-text text-xs line-clamp-1 ms-1">
                                     {conversationInfo.senderName}
                                 </span>

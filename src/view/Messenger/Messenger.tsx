@@ -42,6 +42,8 @@ const Messenger = () => {
         setOpenNewMessenger(false);
     };
 
+    console.log(conversationAccess, "conversationAccess");
+
     useEffect(() => {
         // get conversations
         const getConversations = async () => {
@@ -53,17 +55,44 @@ const Messenger = () => {
                         headers: {
                             "Content-Type": "application/json",
                             Accept: "*/*",
-                            token: `Bearer ${token}`, // Đảm bảo sử dụng "Authorization"
+                            token: `Bearer ${token}`,
                         },
                     }
                 );
                 const newConversations = result.data as ConversationInterface[];
-                console.log(result.data, "result");
-                setConversationAccess(
-                    newConversations.filter(
-                        (con) => con._id === conversationId
-                    )[0] || undefined
-                );
+                const conversationExisted = newConversations.filter(
+                    (con) => con._id === conversationId
+                )[0];
+                console.log(conversationExisted, "conversationExisted");
+
+                if (!conversationExisted) {
+                    const conversationById = await axios.get(
+                        `https://dacnbe.onrender.com/conversation/getConversationById?conversationId=${conversationId}`,
+                        {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Accept: "*/*",
+                                token: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    console.log(conversationById.data, "conversationById.data");
+
+                    newConversations.unshift(conversationById.data);
+                    setConversationAccess(conversationById.data);
+                } else {
+                    setConversationAccess(
+                        newConversations.filter(
+                            (con) => con._id === conversationId
+                        )[0] || undefined
+                    );
+                }
+
+                // if (conversationById && ) {
+                //     newConversations.unshift();
+                // }
+
                 setConversations(newConversations);
             } catch (error) {
                 console.error("Error fetching conversations:", error);
@@ -145,18 +174,28 @@ const Messenger = () => {
                                         )[0].avatar || defaultAvatar
                                     }
                                     senderName={
-                                        conversation.lastMessage.sender.fullname
+                                        conversation.lastMessage
+                                            ? conversation.lastMessage.sender
+                                                  .fullname
+                                            : ""
                                     }
                                     senderAvatar={
-                                        conversation.lastMessage.sender
-                                            .avatar || defaultAvatar
+                                        conversation.lastMessage
+                                            ? conversation.lastMessage.sender
+                                                  .avatar || defaultAvatar
+                                            : ""
                                     }
                                     senderContent={
-                                        conversation.lastMessage.content ||
-                                        "Vừa gửi 1 tin nhắn"
+                                        conversation.lastMessage
+                                            ? conversation.lastMessage
+                                                  .content ||
+                                              "Vừa gửi 1 tin nhắn"
+                                            : ""
                                     }
                                     sendTime={
-                                        conversation.lastMessage.createdAt
+                                        conversation.lastMessage
+                                            ? conversation.lastMessage.createdAt
+                                            : ""
                                     }
                                 />
                             ))}
