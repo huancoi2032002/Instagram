@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import EditPost from "../CreatePosts/Component/EditPost";
 
 interface OtherOptionsIconProps {
     onClose: () => void;
-    postId: string; // Thêm postId để xác định bài viết cần xóa
+    postId: string;
 }
 
 const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) => {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isOptionsVisible, setIsOptionsVisible] = useState(true);
+    const [isEditPostVisible, setIsEditPostVisible] = useState(false);
 
     const handleClose = () => {
-        setIsVisible(false);
+        setIsOptionsVisible(false);
         onClose();
     };
 
@@ -19,8 +21,7 @@ const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) 
             alert("Không tìm thấy token xác thực. Vui lòng đăng nhập lại.");
             return;
         }
-        console.log(postId);
-        
+
         try {
             const response = await fetch(`https://dacnbe.onrender.com/post/deleteOnePost?postId=${postId}`, {
                 method: "POST",
@@ -29,16 +30,16 @@ const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) 
                     "Accept": "*/*",
                     "Accept-Encoding": "gzip, deflate, br",
                     "Connection": "keep-alive",
-                    "token": `Bearer ${token}`, // Thay vì sử dụng "token", hãy dùng "Authorization"
+                    "token": `Bearer ${token}`,
                 },
             });
 
             if (response.ok) {
                 alert("Bài viết đã được xóa thành công!");
-                setIsVisible(false);
+                setIsOptionsVisible(false);
                 onClose();
             } else {
-                const errorText = await response.text(); // Đọc chi tiết lỗi từ server
+                const errorText = await response.text();
                 console.error("API error:", errorText);
                 alert(`Có lỗi khi xóa bài viết: ${errorText}`);
             }
@@ -48,33 +49,50 @@ const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) 
         }
     };
 
+    const handleEditPost = () => {
+        setIsOptionsVisible(false); // Ẩn giao diện tùy chọn
+        setIsEditPostVisible(true); // Hiển thị giao diện chỉnh sửa bài viết
+    };
 
     return (
-        isVisible && (
-            <div className="w-full h-full top-0 left-0 fixed bg-black/50 z-50">
-                <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-100 h-auto bg-ig-elevated-background rounded-xl">
-                        <button
-                            className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
-                        >
-                            Chỉnh sửa bài viết
-                        </button>
-                        <button
-                            className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
-                            onClick={deletePost}
-                        >
-                            Xóa bài viết
-                        </button>
-                        <button
-                            className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
-                            onClick={handleClose}
-                        >
-                            Huỷ
-                        </button>
+        <>
+            {isOptionsVisible && (
+                <div className="w-full h-full top-0 left-0 fixed bg-black/50 z-50">
+                    <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-100 h-auto bg-ig-elevated-background rounded-xl">
+                            <button
+                                className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
+                                onClick={handleEditPost}
+                            >
+                                Chỉnh sửa bài viết
+                            </button>
+                            <button
+                                className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
+                                onClick={deletePost}
+                            >
+                                Xóa bài viết
+                            </button>
+                            <button
+                                className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
+                                onClick={handleClose}
+                            >
+                                Huỷ
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )}
+
+            {isEditPostVisible && (
+                <EditPost
+                    postId={postId}
+                    onClose={() => {
+                        setIsEditPostVisible(false);
+                        onClose(); // Gọi hàm đóng nếu cần
+                    }}
+                />
+            )}
+        </>
     );
 };
 
