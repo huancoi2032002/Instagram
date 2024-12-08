@@ -1,4 +1,4 @@
-import React, { ReactHTMLElement, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     CallIcon,
     EmojisIcon,
@@ -55,7 +55,6 @@ function ChatWithFriend({
     // receive data from socket
     const { receiveMessageData, readMessageData, deleteMessageData } =
         useSocketData();
-    console.log(receiveMessageData, "receiveMessageData");
 
     // when socket data change
     // receive message
@@ -78,7 +77,7 @@ function ChatWithFriend({
 
     // get messages
     useEffect(() => {
-        const getConversations = async () => {
+        const getMessages = async () => {
             try {
                 const result = await axios.get(
                     `https://dacnbe.onrender.com/message/getMessage?conversationId=${conversationId}&lastMessageId=&isAll=yes`,
@@ -97,7 +96,7 @@ function ChatWithFriend({
                 console.error("Error fetching conversations:", error);
             }
         };
-        getConversations();
+        getMessages();
     }, []);
 
     // scroll
@@ -175,7 +174,6 @@ function ChatWithFriend({
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault(); // Ngăn việc xuống dòng
             const value = (event.target as HTMLTextAreaElement).value; // Sử dụng type assertion
-            console.log(value);
 
             // send messages
             try {

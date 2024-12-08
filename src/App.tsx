@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Profile from "./view/Profile/Profile";
 import Home from "./view/Home/Home";
 import Discovery from "./view/Discovery/Discovery";
@@ -7,18 +7,43 @@ import { Messenger } from "./view";
 import Register from "./view/Register/Register";
 import Login from "./view/Login/Login";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     requestNotificationPermission,
     showNotification,
 } from "./Hook/NotificationUtils";
 import defaultAvatar from "~/assets/default-avatar.jpg";
-
-interface Message {
-    content: string;
-    sender: string;
-}
+import { useSocketData } from "./Hook/SocketContext";
 
 function App() {
+    const location = useLocation().pathname;
+    const navigate = useNavigate();
+    const loggedInUserId =
+        localStorage.getItem("userID") || "6739d6501910d4b22d21a29b";
+    const { receiveMessageData } = useSocketData();
+
+    // noti
+    useEffect(() => {
+        if (
+            receiveMessageData &&
+            receiveMessageData.sender._id !== loggedInUserId &&
+            !location.includes("messenger")
+        ) {
+            showNotification(
+                `${receiveMessageData.sender.fullname} vừa nhắn`,
+                `/messenger/${receiveMessageData.conversation}`,
+                navigate,
+                {
+                    body:
+                        receiveMessageData.content ||
+                        receiveMessageData.sender.fullname +
+                            " đã gửi 1 tin nhắn.",
+                    icon: receiveMessageData.sender.avatar || defaultAvatar,
+                }
+            );
+        }
+    }, [receiveMessageData]);
+
     useEffect(() => {
         // Yêu cầu quyền hiển thị thông báo khi ứng dụng khởi chạy
         const askPermission = async () => {
@@ -26,14 +51,6 @@ function App() {
         };
         askPermission();
     }, []);
-
-    const handleShowNotification = () => {
-        // Hiển thị thông báo
-        showNotification("Thông báo mới!", {
-            body: "Hãy kiểm tra thông tin cập nhật ngay bây giờ.",
-            icon: defaultAvatar, // Link tới ảnh đại diện
-        });
-    };
 
     return (
         <Routes>
