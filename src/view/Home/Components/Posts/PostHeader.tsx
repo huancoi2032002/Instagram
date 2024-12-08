@@ -36,15 +36,15 @@ const PostHeader: React.FC<PostHeaderProps> = ({ username, avatar, createdAt, _i
 
     return (
         <div className="flex justify-between items-center w-full">
-            <div className="flex items-center gap-2" onClick={handleNavigateToProfile}>
+            <div className="flex items-center gap-2">
                 <img
                     src={avatar}
                     alt="user profile pic"
-                    className="w-8 h-8 rounded-full cursor-pointer"
+                    className="w-8 h-8 rounded-full cursor-pointer" onClick={handleNavigateToProfile}
                 />
                 <div className="flex items-center text-xs font-bold gap-1">
-                    <div className="cursor-pointer">{username}</div>
-                    <span className="text-gray-600 font-medium">{formattedDate}</span>
+                    <div className="cursor-pointer" onClick={handleNavigateToProfile} >{username}</div>
+                    <span className="text-gray-600 font-medium" onClick={handleNavigateToProfile}>{formattedDate}</span>
                     {userId !== _id && (
                         <span className="text-gray-600 font-medium flex items-center gap-1">
                             •
