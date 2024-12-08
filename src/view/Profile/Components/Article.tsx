@@ -91,20 +91,25 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
     const [isOpenCreatePost, setIsOpenCreatePost] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
     const [users, setUsers] = useState<User[]>([]);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(userId || localStorage.getItem('userID'));
 
     useEffect(() => {
+        if (!currentUserId) {
+            console.error("User ID is missing");
+            return;
+        }
+
         const token = localStorage.getItem('authToken');
 
         const fetchPosts = async () => {
             try {
-                const postResponse = await axios.get(`https://dacnbe.onrender.com/post/getPostsOfOneUser?userId=${userId}`, {
+                const postResponse = await axios.get(`https://dacnbe.onrender.com/post/getPostsOfOneUser?userId=${currentUserId}`, {
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "*/*",
                         "token": `Bearer ${token}`,
                     }
                 });
-
                 setPosts(postResponse.data);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -123,9 +128,8 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
 
         fetchPosts();
         fetchUsers();
-    }, [userId]);
 
-
+    }, [currentUserId]);
 
     const handleOpenCreatePost = () => {
         setIsOpenCreatePost(true);
@@ -135,8 +139,8 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
         setIsOpenCreatePost(false);
     };
 
-    const getUserAvatar = (authorId: any) => {
-        if (typeof authorId !== "string") {
+    const getUserAvatar = (authorId: string) => {
+        if (!authorId) {
             console.error("Invalid authorId:", authorId);
             return "";
         }
@@ -145,8 +149,8 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
         return user ? user.avatar : "";
     };
 
-    const getUsername = (authorId: any) => {
-        if (typeof authorId !== "string") {
+    const getUsername = (authorId: string) => {
+        if (!authorId) {
             console.error("Invalid authorId:", authorId);
             return "Unknown";
         }
@@ -154,10 +158,6 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
         const user = users.find((user) => user._id === authorId);
         return user ? user.username : "Unknown";
     };
-
-   
-
-
 
     return (
         <div className="z-[100]">
@@ -181,7 +181,7 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
                     {posts.map((post) => (
                         <div key={post._id}>
                             <ItemPost
-                                img={post.medias[0].source}
+                                img={post.medias[0]?.source || ""}
                                 className="custom-class-for-post"
                                 likeNum={post.likeNum}
                                 commentNum={post.commentNum}
@@ -193,11 +193,11 @@ const Article: React.FC<ArticleProps> = ({ userId }) => {
                             />
                         </div>
                     ))}
-
                 </div>
             </div>
         </div>
     );
 };
+
 
 export default Article;

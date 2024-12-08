@@ -4,7 +4,7 @@ import './Profile.scss';
 import Button from "~/components/Button/Button";
 import { SetingDropIcon } from "~/assets/SettingIcon";
 import { AddUser, PlusIcon, PostIcon, SavedIcon, UserTagIcon } from "~/assets";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import Article from "./Components/Article";
 import Footer from "~/components/Footer/Footer";
 import Saved from "./Components/Saved";
@@ -12,21 +12,26 @@ import UserTag from "./Components/UserTag";
 import { useEffect, useState } from "react";
 import { User } from "~/store/User/User";
 
-const Profile = () => {
-    // Get userId from localStorage (for the current user profile)
-    const userId = localStorage.getItem('userID');
+
+const ProfileFriends = () => {
+    const { userId: paramUserId } = useParams(); // Lấy userId từ URL params
     const [user, setUser] = useState<User | null>(null);
-    const [followers, setFollowers] = useState<any[]>([]); // Store list of followers
-    const [following, setFollowing] = useState<any[]>([]); // Store list of people being followed
+    const [followers, setFollowers] = useState<any[]>([]); // Lưu trữ danh sách người theo dõi
+    const [following, setFollowing] = useState<any[]>([]); // Lưu trữ danh sách người đang theo dõi
 
     const location = useLocation();
     const currentPath = location.pathname;
 
     useEffect(() => {
-        if (userId) {
-            const token = localStorage.getItem('authToken');
-
-            // Fetch user information
+        // Xác định userId (ưu tiên lấy từ URL, nếu không có thì lấy từ localStorage)
+        const userId = paramUserId;
+        console.log("userId la", userId);
+        
+        
+        const token = localStorage.getItem('authToken');
+    
+        if (userId && token) {
+            // Fetch thông tin người dùng
             const fetchUser = async () => {
                 try {
                     const response = await fetch(`https://dacnbe.onrender.com/user/getUserById?userId=${userId}`, {
@@ -42,8 +47,8 @@ const Profile = () => {
                     console.error("Error fetching user:", error);
                 }
             };
-
-            // Fetch following list
+    
+            // Fetch danh sách người theo dõi
             const fetchFollowing = async () => {
                 try {
                     const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollowing?userId=${userId}`, {
@@ -59,8 +64,8 @@ const Profile = () => {
                     console.error("Error fetching following:", error);
                 }
             };
-
-            // Fetch followers list
+    
+            // Fetch danh sách người đang theo dõi
             const fetchFollower = async () => {
                 try {
                     const response = await fetch(`https://dacnbe.onrender.com/relationship/getFollower?userId=${userId}`, {
@@ -76,12 +81,12 @@ const Profile = () => {
                     console.error("Error fetching followers:", error);
                 }
             };
-
+    
             fetchUser();
             fetchFollowing();
             fetchFollower();
         }
-    }, [userId]); // Runs again if userId in localStorage changes
+    }, [paramUserId]);// Chạy lại khi userId trong URL thay đổi
 
     return (
         <LayoutMain>
@@ -92,24 +97,24 @@ const Profile = () => {
                             <div className="w-full h-auto flex gap-10 items-center">
                                 <div className="w-[150px] h-[150px] flex-shrink-0">
                                     <img
-                                        src={user?.avatar || Avatar}  // Display user avatar or default avatar
+                                        src={user?.avatar || Avatar}  // Hiển thị avatar của người dùng hoặc ảnh mặc định
                                         className="w-full h-full rounded-full"
                                     />
                                 </div>
                                 <div className="h-auto flex flex-col gap-3">
                                     <div className="w-full h-10 flex items-center lg:gap-5 gap-2">
                                         <span className="lg:text-xl">{user?.username || 'Tên người dùng'}</span>
-                                        {userId && (
+                                        {paramUserId ? (
                                             <div className="w-auto h-auto flex items-center gap-4">
                                                 <button className="xl:h-8 h-auto px-4 text-sm bg-ig-primary-button rounded-md">Theo dõi</button>
                                                 <button className="xl:h-8 h-auto px-4 text-sm bg-ig-bg-button rounded-md"><AddUser /></button>
                                             </div>
-                                        )}
-                                        {!userId && (
+                                        ) : (
                                             <div className="flex gap-4">
                                                 <Button title="Xem kho lưu trữ" link="" />
                                                 <Button title="Chỉnh sửa trang cá nhân" link="" />
                                             </div>
+
                                         )}
                                         <div className="cursor-pointer">
                                             <SetingDropIcon className="w-6 h-6" />
@@ -120,10 +125,10 @@ const Profile = () => {
                                             <span>0 bài viết</span>
                                         </div>
                                         <div className="flex gap-1 lg:text-base text-sm cursor-pointer">
-                                            <span>{followers.length} người theo dõi</span> {/* Display number of followers */}
+                                            <span>{followers.length} người theo dõi</span> {/* Hiển thị số người theo dõi */}
                                         </div>
                                         <div className="flex gap-1 lg:text-base text-sm cursor-pointer">
-                                            <span>{following.length} Đang theo dõi</span> {/* Display number of following */}
+                                            <span>{following.length} Đang theo dõi</span> {/* Hiển thị số người đang theo dõi */}
                                         </div>
                                     </div>
 
@@ -179,9 +184,9 @@ const Profile = () => {
                                         </div>
                                     </Link>
                                 </div>
-                                <div className="w-full">
+                                <div className="">
                                     <Routes>
-                                        <Route path="*" element={<Article userId={userId || undefined} />} />
+                                        <Route path="*" element={<Article userId={paramUserId}/>} />
                                         <Route path="saved" element={<Saved />} />
                                         <Route path="tagged" element={<UserTag />} />
                                     </Routes>
@@ -196,4 +201,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default ProfileFriends;
