@@ -18,6 +18,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [usernameError, setUsernameError] = useState("");
 
     const togglePassword = () => {
         setShowPassword((prev) => !prev);
@@ -28,10 +29,42 @@ const Register = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const checkUsernameAvailability = async (username: string) => {
+        try {
+            const response = await fetch("https://dacnbe.onrender.com/user/getAllUsers");
+            const data = await response.json();
+            const existingUsernames = data.map((user: any) => user.username);
+
+            if (existingUsernames.includes(username)) {
+                return "Tên người dùng đã tồn tại.";
+            }
+
+            return "";
+        } catch (error) {
+            return "Không thể kết nối tới máy chủ. Vui lòng thử lại.";
+        }
+    };
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
         setErrorMessage("");
+        setUsernameError("");
+
+        // Validate username
+        if (formData.username.length <= 6) {
+            setUsernameError("Tên người dùng phải có hơn 6 ký tự.");
+            setIsSubmitting(false);
+            return;
+        }
+
+        // Check if the username is available
+        const usernameValidationError = await checkUsernameAvailability(formData.username);
+        if (usernameValidationError) {
+            setUsernameError(usernameValidationError);
+            setIsSubmitting(false);
+            return;
+        }
 
         try {
             const response = await fetch("https://dacnbe.onrender.com/auth/register", {
@@ -115,6 +148,9 @@ const Register = () => {
                                 <div className="underline"></div>
                                 <label>Tên người dùng</label>
                             </div>
+                            {usernameError && (
+                                <div className="text-red-500 text-xs mb-2">{usernameError}</div>
+                            )}
                             <div className="input-data h-10">
                                 <input
                                     type={showPassword ? "text" : "password"}

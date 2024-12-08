@@ -99,18 +99,13 @@ const Profile = () => {
                                 <div className="h-auto flex flex-col gap-3">
                                     <div className="w-full h-10 flex items-center lg:gap-5 gap-2">
                                         <span className="lg:text-xl">{user?.username || 'Tên người dùng'}</span>
-                                        {userId && (
-                                            <div className="w-auto h-auto flex items-center gap-4">
-                                                <button className="xl:h-8 h-auto px-4 text-sm bg-ig-primary-button rounded-md">Theo dõi</button>
-                                                <button className="xl:h-8 h-auto px-4 text-sm bg-ig-bg-button rounded-md"><AddUser /></button>
-                                            </div>
-                                        )}
-                                        {!userId && (
+                                       
+                                        
                                             <div className="flex gap-4">
                                                 <Button title="Xem kho lưu trữ" link="" />
                                                 <Button title="Chỉnh sửa trang cá nhân" link="" />
                                             </div>
-                                        )}
+                                        
                                         <div className="cursor-pointer">
                                             <SetingDropIcon className="w-6 h-6" />
                                         </div>

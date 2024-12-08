@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import useSessionStorage from '~/Hook/useSessionStorage';
 import { PrevIcon, NextIcon, CutIcon, MediaFileIcon, ZoomIcon } from "~/assets";
 import { LabelPost } from "./LabelPost";
-import CreateNewPost from "./CreateNewPost";
 import NotificationPost from "./NotificationPost";
 import AddImagePost from "./AddImagePost";
 

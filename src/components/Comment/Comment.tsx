@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import NotificationPost from "../../view/Home/Components/NotificationPost/NotificationPost";
 import { EmojisIcon, OtherOptionsIcon, VectorX } from "~/assets";
 import { PrevIcon, NextIcon, LoveIcon, FavouriteIcon, ShareIcon, SavedIcon, CommentIcon } from "~/assets";
 import { formatDateDifference } from "~/store/format/formatDateDifference";
 import axios from "axios";
+import OtherOptions from "./OtherOptions";
 
 
 type CommentProps = {
@@ -36,7 +36,6 @@ interface User {
 
 
 const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, likeNum, postId, createdAt }) => {
-
     const [isShowNotificationPost, setIsShowNotificationPost] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [comment, setComment] = useState("");
@@ -229,7 +228,7 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                                     <span className="text-sm text-[#F5F5F5]">{username}</span>
                                 </div>
                             </div>
-                            <div className="w-10 h-10 flex items-center justify-center">
+                            <div className="w-10 h-10 flex items-center justify-center cursor-pointer" onClick={handleShowNotificationPost}>
                                 <OtherOptionsIcon />
                             </div>
                         </div>
@@ -315,7 +314,7 @@ const Comment: React.FC<CommentProps> = ({ onClose, images, username, avatar, li
                 </div>
             </div>
             {isShowNotificationPost && (
-                <NotificationPost onClose={() => setIsShowNotificationPost(false)} />
+                <OtherOptions onClose={() => handleShowNotificationPost} postId={postId}/> 
             )}
             <div className="absolute top-6 right-4 cursor-pointer" onClick={onClose}>
                 <VectorX />
