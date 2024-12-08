@@ -28,7 +28,7 @@ export interface MessageInterface {
 export interface ConversationInterface {
     _id: string;
     participants: UserInterface[];
-    lastMessage: MessageInterface;
+    lastMessage?: MessageInterface;
     isBlock: boolean;
     createdAt: string;
 }
