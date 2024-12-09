@@ -88,7 +88,7 @@ const Login = () => {
                 alert("Đăng nhập thành công!");
                 localStorage.setItem("authToken", result.user.accessToken); // Lưu token
                 localStorage.setItem("userID", result.user._id);
-                window.location.href = "/"; // Chuyển hướng
+                window.location.href = "/home"; // Chuyển hướng
             } else {
                 setErrorMessage(result.message || "Đăng nhập thất bại. Vui lòng thử lại.");
             }

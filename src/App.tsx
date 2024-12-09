@@ -55,7 +55,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute isAuthenticated={!!loggedInUserId}><Home /></ProtectedRoute>} />
+      <Route path="/home" element={<ProtectedRoute isAuthenticated={!!loggedInUserId}><Home /></ProtectedRoute>} />
+      <Route path="/" element={<ProtectedRoute isAuthenticated={!!loggedInUserId}><Login /></ProtectedRoute>} />
       <Route path="/discovery" element={<ProtectedRoute isAuthenticated={!!loggedInUserId}><Discovery /></ProtectedRoute>} />
       <Route
         path="/profile"
