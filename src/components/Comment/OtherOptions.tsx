@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditPost from "../CreatePosts/Component/EditPost";
 
 interface OtherOptionsIconProps {
@@ -9,6 +9,38 @@ interface OtherOptionsIconProps {
 const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) => {
     const [isOptionsVisible, setIsOptionsVisible] = useState(true);
     const [isEditPostVisible, setIsEditPostVisible] = useState(false);
+    const [isAuthor, setIsAuthor] = useState(false); // Kiểm tra xem người dùng có phải là tác giả không
+    const userId = localStorage.getItem("userID");
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+
+        const fetchPostDetails = async () => {
+            try {
+                const response = await fetch(`https://dacnbe.onrender.com/post/getOnePost?postId=${postId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "*/*",
+                        "Accept-Encoding": "gzip, deflate, br",
+                        "Connection": "keep-alive",
+                        "token": `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const postData = await response.json();
+                    setIsAuthor(postData.author._id === userId); // So sánh userId với author
+                } else {
+                    console.error("Failed to fetch post details");
+                }
+            } catch (error) {
+                console.error("Error fetching post details:", error);
+            }
+        };
+
+        fetchPostDetails();
+    }, [postId, userId]);
 
     const handleClose = () => {
         setIsOptionsVisible(false);
@@ -60,18 +92,25 @@ const OtherOptionsIcon: React.FC<OtherOptionsIconProps> = ({ onClose, postId }) 
                 <div className="w-full h-full top-0 left-0 fixed bg-black/50 z-50">
                     <div className="w-full h-full flex items-center justify-center">
                         <div className="w-100 h-auto bg-ig-elevated-background rounded-xl">
-                            <button
-                                className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
-                                onClick={handleEditPost}
-                            >
-                                Chỉnh sửa bài viết
-                            </button>
-                            <button
-                                className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
-                                onClick={deletePost}
-                            >
-                                Xóa bài viết
-                            </button>
+                            <>
+                                <button
+                                    className={`w-full px-2 py-1 text-sm min-h-12 cursor-pointer ${isAuthor ? "" : "opacity-50 cursor-not-allowed"
+                                        }`}
+                                    onClick={isAuthor ? handleEditPost : undefined}
+                                    disabled={!isAuthor}
+                                >
+                                    Chỉnh sửa bài viết
+                                </button>
+                                <button
+                                    className={`w-full px-2 py-1 text-sm min-h-12 cursor-pointer ${isAuthor ? "" : "opacity-50 cursor-not-allowed"
+                                        }`}
+                                    onClick={isAuthor ? deletePost : undefined}
+                                    disabled={!isAuthor}
+                                >
+                                    Xóa bài viết
+                                </button>
+                            </>
+
                             <button
                                 className="w-full px-2 py-1 text-sm min-h-12 cursor-pointer"
                                 onClick={handleClose}

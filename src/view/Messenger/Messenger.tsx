@@ -65,7 +65,7 @@ const Messenger = () => {
                 )[0];
                 console.log(conversationExisted, "conversationExisted");
 
-                if (!conversationExisted) {
+                if (!conversationExisted && conversationId) {
                     const conversationById = await axios.get(
                         `https://dacnbe.onrender.com/conversation/getConversationById?conversationId=${conversationId}`,
                         {
