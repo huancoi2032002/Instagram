@@ -82,6 +82,14 @@ function App() {
         }
       />
       <Route
+        path="/messenger"
+        element={
+          <ProtectedRoute isAuthenticated={!!loggedInUserId}>
+            <Messenger />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/messenger/:conversationId"
         element={
           <ProtectedRoute isAuthenticated={!!loggedInUserId}>

@@ -44,28 +44,74 @@ const Register = () => {
             return "Không thể kết nối tới máy chủ. Vui lòng thử lại.";
         }
     };
+    const checkUsernameOrEmailAvailability = async (username: string, email: string) => {
+        try {
+            const response = await fetch("https://dacnbe.onrender.com/user/getAllUsers");
+            const data = await response.json();
+            console.log(data);
+            
+    
+            const existingUsernames = data.map((user: any) => user.username);
+            const existingEmails = data.map((user: any) => user.email);
+    
+            if (existingUsernames.includes(username)) {
+                return "Tên người dùng đã tồn tại.";
+            }
+    
+            if (existingEmails.includes(email)) {
+                return "Email đã được sử dụng.";
+            }
+    
+            return ""; // Không có lỗi
+        } catch (error) {
+            return "Không thể kết nối tới máy chủ. Vui lòng thử lại.";
+        }
+    };
+    
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
         setErrorMessage("");
         setUsernameError("");
-
+    
+        // Validate empty fields
+        if (
+            !formData.mobileNumberOrEmail ||
+            !formData.fullname ||
+            !formData.username ||
+            !formData.password
+        ) {
+            setErrorMessage("Vui lòng điền đầy đủ thông tin.");
+            setIsSubmitting(false);
+            return;
+        }
+    
         // Validate username
         if (formData.username.length <= 6) {
             setUsernameError("Tên người dùng phải có hơn 6 ký tự.");
             setIsSubmitting(false);
             return;
         }
-
-        // Check if the username is available
-        const usernameValidationError = await checkUsernameAvailability(formData.username);
-        if (usernameValidationError) {
-            setUsernameError(usernameValidationError);
+    
+        // Validate password
+        if (formData.password.length <= 6) {
+            setErrorMessage("Mật khẩu phải có hơn 6 ký tự.");
             setIsSubmitting(false);
             return;
         }
-
+    
+        // Check if the username or email is available
+        const availabilityError = await checkUsernameOrEmailAvailability(
+            formData.username,
+            formData.mobileNumberOrEmail
+        );
+        if (availabilityError) {
+            setErrorMessage(availabilityError);
+            setIsSubmitting(false);
+            return;
+        }
+    
         try {
             const response = await fetch("https://dacnbe.onrender.com/auth/register", {
                 method: "POST",
@@ -74,7 +120,7 @@ const Register = () => {
                 },
                 body: JSON.stringify(formData),
             });
-
+    
             const result = await response.json();
             if (response.ok) {
                 alert("Đăng ký thành công!");
@@ -88,6 +134,8 @@ const Register = () => {
             setIsSubmitting(false);
         }
     };
+    
+    
 
     return (
         <section className="w-full h-full">

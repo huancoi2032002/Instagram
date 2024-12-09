@@ -65,7 +65,7 @@ const CreateNewPost: React.FC<CreateNewPostProps> = ({ step, setStep, onClose })
             });
             if (response.ok) {
                 authorData = await response.json();
-                onClose();
+                alert("Đăng bài thành công")
             } else {
                 console.error("Failed to fetch user data");
                 return;
